@@ -11,6 +11,8 @@ import {
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import InteractiveBackground from "@/components/InteractiveBackground";
+import ThemeSwitcher from "@/components/ThemeSwitcher";
+import ScrollProgress from "@/components/ScrollProgress";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -41,12 +43,15 @@ export default function RootLayout({
 
   return (
     <>
-      <html lang="en">
+      <html lang="en" className="scroll-smooth">
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           {/* Interactive background */}
           <InteractiveBackground />
+          
+          {/* Scroll progress indicator */}
+          <ScrollProgress showPercentage={true} />
           
           {/* Cursor effects - will be initialized by client JS */}
           <div className="cursor-dot hidden md:block"></div>
@@ -56,7 +61,7 @@ export default function RootLayout({
           <div className="bg-primary/5 backdrop-blur-sm py-1 px-4 text-xs border-b border-primary/10 relative z-10">
             <div className="container mx-auto flex justify-between items-center">
               <div className="flex items-center gap-4">
-                <div className="prayer-time">
+                <div className="prayer-time animate-pulse-glow">
                   <span className="prayer-dot"></span>
                   <span>{currentTime}</span>
                 </div>
@@ -65,9 +70,11 @@ export default function RootLayout({
                 </div>
               </div>
               <div className="flex items-center gap-4">
-                <button className="flex items-center gap-1 hover:text-primary transition-colors">
+                <ThemeSwitcher />
+                <button className="flex items-center gap-1 hover:text-primary transition-colors tooltip">
                   <LanguageIcon className="w-4 h-4" />
                   <span>English</span>
+                  <span className="tooltip-content">Change language</span>
                 </button>
                 <span className="text-foreground/30">|</span>
                 <button className="flex items-center gap-1 hover:text-primary transition-colors arabic-text">
@@ -263,27 +270,62 @@ export default function RootLayout({
             </div>
           </footer>
           
-          {/* Client-side JS for cursor effects */}
+          {/* Enhanced client-side JS for interaction effects */}
           <script dangerouslySetInnerHTML={{
             __html: `
               document.addEventListener('DOMContentLoaded', () => {
+                // Cursor effects
                 const cursorDot = document.querySelector('.cursor-dot');
                 const cursorOutline = document.querySelector('.cursor-dot-outline');
                 
-                if (!cursorDot || !cursorOutline) return;
+                if (cursorDot && cursorOutline) {
+                  window.addEventListener('mousemove', (e) => {
+                    const posX = e.clientX;
+                    const posY = e.clientY;
+                    
+                    cursorDot.style.left = \`\${posX}px\`;
+                    cursorDot.style.top = \`\${posY}px\`;
+                    
+                    // Delay outline movement for trail effect
+                    setTimeout(() => {
+                      cursorOutline.style.left = \`\${posX}px\`;
+                      cursorOutline.style.top = \`\${posY}px\`;
+                    }, 100);
+                  });
+                  
+                  // Scale effect on interactive elements
+                  const interactiveElements = document.querySelectorAll('a, button, .interactive-btn, .hover-3d');
+                  interactiveElements.forEach(el => {
+                    el.addEventListener('mouseenter', () => {
+                      cursorDot.style.transform = 'translate(-50%, -50%) scale(0.5)';
+                      cursorOutline.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                      cursorOutline.style.borderColor = 'var(--primary)';
+                    });
+                    
+                    el.addEventListener('mouseleave', () => {
+                      cursorDot.style.transform = 'translate(-50%, -50%) scale(1)';
+                      cursorOutline.style.transform = 'translate(-50%, -50%) scale(1)';
+                      cursorOutline.style.borderColor = 'var(--primary)';
+                    });
+                  });
+                }
                 
-                window.addEventListener('mousemove', (e) => {
-                  const posX = e.clientX;
-                  const posY = e.clientY;
+                // Magnetic effect for buttons
+                const magneticBtns = document.querySelectorAll('.magnetic-btn');
+                
+                magneticBtns.forEach(btn => {
+                  btn.addEventListener('mousemove', (e) => {
+                    const rect = btn.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+                    
+                    // Move button slightly towards cursor
+                    btn.style.transform = \`translate(\${x * 0.1}px, \${y * 0.1}px)\`;
+                  });
                   
-                  cursorDot.style.left = \`\${posX}px\`;
-                  cursorDot.style.top = \`\${posY}px\`;
-                  
-                  // Delay outline movement for trail effect
-                  setTimeout(() => {
-                    cursorOutline.style.left = \`\${posX}px\`;
-                    cursorOutline.style.top = \`\${posY}px\`;
-                  }, 100);
+                  btn.addEventListener('mouseleave', () => {
+                    btn.style.transform = 'translate(0, 0)';
+                  });
                 });
                 
                 // Add visible class when document is loaded
@@ -298,6 +340,16 @@ export default function RootLayout({
                   });
                   
                   observer.observe(section);
+                });
+                
+                // Initialize flip cards
+                document.querySelectorAll('.flip-card-trigger').forEach(trigger => {
+                  trigger.addEventListener('click', (e) => {
+                    const card = e.currentTarget.closest('.flip-card');
+                    if (card) {
+                      card.classList.toggle('flipped');
+                    }
+                  });
                 });
               });
             `
