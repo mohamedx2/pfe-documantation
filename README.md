@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend Hamroun Documentation Site
+
+<p align="center">
+  <code style="font-size: 24px; color: #4A90E2; background-color: transparent">{ Frontend Hamroun }</code>
+</p>
+
+This repository contains the documentation website for Frontend Hamroun, a lightweight full-stack JavaScript framework with Virtual DOM and hooks implementation.
+
+## About Frontend Hamroun
+
+Frontend Hamroun is a JavaScript framework that provides:
+
+- **Lightweight Core**: <5KB gzipped for essential runtime
+- **Full-Stack Solution**: Client and server capabilities in one package
+- **Virtual DOM**: Efficient rendering and diffing algorithm
+- **Hooks API**: Complete hooks system (useState, useEffect, useMemo, useRef)
+- **Context API**: Simple state management across components
+- **Server-Side Rendering**: Optimized SSR with hydration
+- **Database Integration**: Support for MongoDB, MySQL, and PostgreSQL
+- **Authentication**: Built-in JWT authentication system
+- **API Routing**: Express-based file system routing
+- **TypeScript Support**: Full type definitions included
+- **Interactive CLI**: Powerful tools for project scaffolding and component creation
 
 ## Getting Started
 
-First, run the development server:
+To run this documentation site locally:
 
 ```bash
+# Install dependencies
+npm install
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Contributing
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Contributions to improve the documentation are welcome. Please feel free to submit a Pull Request.
 
-## Learn More
+## License
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT © Hamroun
