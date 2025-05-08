@@ -24,7 +24,6 @@ function Counter() {
     </div>
   );
 }`,
-  language = 'jsx',
   theme = 'dark',
   readOnly = false,
 }) => {

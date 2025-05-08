@@ -7,12 +7,18 @@ import {
   ArrowTopRightOnSquareIcon,
   GlobeAltIcon,
   LanguageIcon,
-  ChatBubbleLeftRightIcon
+  ChatBubbleLeftRightIcon,
+  Bars3Icon
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
+import Link from "next/link";
 import InteractiveBackground from "@/components/InteractiveBackground";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
-import ScrollProgress from "@/components/ScrollProgress";
+import InteractiveCursor from "@/components/InteractiveCursor";
+import MobileNavigation from "@/components/MobileNavigation";
+import AudioFeedback from "@/components/AudioFeedback";
+import AnimatedGradientText from "@/components/AnimatedGradientText";
+import ScrollProgressIndicator from "@/components/ScrollProgressIndicator";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -41,6 +47,40 @@ export default function RootLayout({
     hour12: true 
   });
 
+  // Navigation items for mobile menu
+  const navItems = [
+    { 
+      label: "Features", 
+      href: "#features", 
+      icon: <Squares2X2Icon className="w-5 h-5" /> 
+    },
+    { 
+      label: "Docs", 
+      href: "#docs", 
+      icon: <BookOpenIcon className="w-5 h-5" /> 
+    },
+    { 
+      label: "Examples", 
+      href: "#examples", 
+      icon: <CodeBracketIcon className="w-5 h-5" /> 
+    },
+    { 
+      label: "One Culture", 
+      href: "#community", 
+      icon: <GlobeAltIcon className="w-5 h-5" /> 
+    },
+    { 
+      label: "Arabic Community", 
+      href: "#arabic-dev", 
+      icon: <ChatBubbleLeftRightIcon className="w-5 h-5" /> 
+    },
+    { 
+      label: "GitHub", 
+      href: "https://github.com/hamroun/frontend-hamroun", 
+      icon: <ArrowTopRightOnSquareIcon className="w-5 h-5" /> 
+    }
+  ];
+
   return (
     <>
       <html lang="en" className="scroll-smooth">
@@ -48,124 +88,154 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           {/* Interactive background */}
-          <InteractiveBackground />
+          <InteractiveBackground 
+            opacity={0.8}
+            particleDensity={12}
+            mouseForce={120}
+          />
           
-          {/* Scroll progress indicator */}
-          <ScrollProgress showPercentage={true} />
+          {/* Custom cursor for desktop */}
+          <InteractiveCursor />
           
-          {/* Cursor effects - will be initialized by client JS */}
-          <div className="cursor-dot hidden md:block"></div>
-          <div className="cursor-dot-outline hidden md:block"></div>
+          {/* Audio feedback for interactions */}
+          <AudioFeedback />
+          
+          {/* Replace the static scroll indicator with the client component */}
+          <ScrollProgressIndicator />
           
           {/* Top banner for language selection and special features */}
-          <div className="bg-primary/5 backdrop-blur-sm py-1 px-4 text-xs border-b border-primary/10 relative z-10">
+          <div className="glass-morphism bg-primary/5 backdrop-blur-lg py-2 px-4 text-xs border-b border-primary/10 relative z-10">
             <div className="container mx-auto flex justify-between items-center">
               <div className="flex items-center gap-4">
-                <div className="prayer-time animate-pulse-glow">
+                <div className="prayer-time animate-pulse-border">
                   <span className="prayer-dot"></span>
                   <span>{currentTime}</span>
                 </div>
-                <div className="hidden md:block">
-                  <span className="text-foreground/60">Frontend Hamroun v1.0 - The Middle East's JavaScript Framework</span>
+                <div className="hidden md:flex items-center">
+                  <span className="text-foreground/70 mr-2">Frontend Hamroun v1.0</span>
+                  <span className="bg-accent/20 text-accent-dark px-2 py-0.5 rounded-full text-[10px] font-medium animate-pulse">BETA</span>
                 </div>
               </div>
               <div className="flex items-center gap-4">
                 <ThemeSwitcher />
-                <button className="flex items-center gap-1 hover:text-primary transition-colors tooltip">
-                  <LanguageIcon className="w-4 h-4" />
-                  <span>English</span>
-                  <span className="tooltip-content">Change language</span>
-                </button>
-                <span className="text-foreground/30">|</span>
-                <button className="flex items-center gap-1 hover:text-primary transition-colors arabic-text">
-                  <span>العربية</span>
-                </button>
+                <div className="h-4 w-px bg-foreground/10"></div>
+                <div className="relative group tooltip-animated">
+                  <button className="flex items-center gap-1 hover:text-primary transition-colors">
+                    <LanguageIcon className="w-4 h-4" />
+                    <span>English</span>
+                  </button>
+                  <div className="tooltip-content">
+                    Change language
+                  </div>
+                  <div className="absolute right-0 mt-1 w-40 glass-morphism rounded-md shadow-lg border border-primary/10 hidden group-hover:block z-50 transform transition-all duration-300 origin-top-right scale-90 group-hover:scale-100">
+                    <div className="py-1">
+                      <a href="#" className="block px-4 py-2 text-sm hover:text-primary transition-colors">English</a>
+                      <a href="#" className="block px-4 py-2 text-sm hover:text-primary transition-colors arabic-text text-right">العربية</a>
+                      <a href="#" className="block px-4 py-2 text-sm hover:text-primary transition-colors">Français</a>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          <header className="sticky top-0 z-10 w-full bg-background/60 border-b border-black/10 dark:border-white/10 backdrop-blur-md">
-            <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-              <div className="flex items-center gap-2">
-                <div className="relative h-10 w-10">
-                  <Image 
-                    src="/images/logo.png"
-                    alt="Frontend Hamroun Logo"
-                    width={40}
-                    height={40}
-                    className="object-contain"
-                  />
-                  <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-accent rounded-full border-2 border-background"></div>
+          {/* Enhanced header with better navigation */}
+          <header className="sticky top-0 z-40 w-full bg-background/60 border-b border-black/5 dark:border-white/5 backdrop-blur-xl">
+            <div className="container mx-auto px-4 py-3">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  <Link href="/" className="cursor-magnet flex items-center gap-2 hover:opacity-90 transition-opacity group">
+
+                    <div className="relative h-10 w-10 animate-float-3d">
+                      <Image 
+                        src="/images/logo.png"
+                        alt="Frontend Hamroun Logo"
+                        width={40}
+                        height={40}
+                        className="object-contain"
+                        priority
+                      />
+                    </div>
+                    <AnimatedGradientText 
+                      text="Frontend Hamroun" 
+                      fontSize="1.125rem" 
+                      fontWeight="600"
+                      className="transition-all duration-300 group-hover:opacity-80"
+                    />
+                  </Link>
+                  
                 </div>
-                <span className="font-bold text-lg logo-text-gradient">
-                  Frontend Hamroun
-                </span>
-              </div>
-              <nav className="hidden md:block">
-                <ul className="flex space-x-8">
-                  <li>
-                    <a href="#features" className="flex items-center gap-1.5 hover:text-primary transition-colors">
-                      <Squares2X2Icon className="w-4 h-4" />
-                      <span>Features</span>
+
+                {/* Desktop navigation with pill style */}
+                <div className="hidden md:flex items-center gap-8">
+                  <ul className="flex space-x-6">
+                    <li>
+                      <a href="#features" className="nav-pill flex items-center gap-1.5">
+                        <Squares2X2Icon className="w-4 h-4" />
+                        <span>Features</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#docs" className="nav-pill flex items-center gap-1.5">
+                        <BookOpenIcon className="w-4 h-4" />
+                        <span>Docs</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#examples" className="nav-pill flex items-center gap-1.5">
+                        <CodeBracketIcon className="w-4 h-4" />
+                        <span>Examples</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#community" className="nav-pill flex items-center gap-1.5">
+                        <GlobeAltIcon className="w-4 h-4" />
+                        <span>One Culture</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#arabic-dev" className="nav-pill flex items-center gap-1.5">
+                        <ChatBubbleLeftRightIcon className="w-4 h-4" />
+                        <span>Arabic Community</span>
+                      </a>
+                    </li>
+                  </ul>
+                  
+                  <div className="flex items-center gap-3">
+                    <a href="#getting-started" className="btn-interactive text-sm px-5 py-1.5 rounded-full">
+                      Get Started
                     </a>
-                  </li>
-                  <li>
-                    <a href="#docs" className="flex items-center gap-1.5 hover:text-primary transition-colors">
-                      <BookOpenIcon className="w-4 h-4" />
-                      <span>Docs</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#examples" className="flex items-center gap-1.5 hover:text-primary transition-colors">
-                      <CodeBracketIcon className="w-4 h-4" />
-                      <span>Examples</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a 
-                      href="#community"
-                      className="flex items-center gap-1.5 hover:text-primary transition-colors"
-                    >
-                      <GlobeAltIcon className="w-4 h-4" />
-                      <span>One Culture</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a 
-                      href="#arabic-dev"
-                      className="flex items-center gap-1.5 hover:text-primary transition-colors"
-                    >
-                      <ChatBubbleLeftRightIcon className="w-4 h-4" />
-                      <span>Arabic Community</span>
-                    </a>
-                  </li>
-                  <li>
                     <a 
                       href="https://github.com/hamroun/frontend-hamroun" 
-                      className="flex items-center gap-1.5 hover:text-primary transition-colors"
+                      className="p-2 rounded-full bg-secondary hover:bg-secondary/80 transition-colors"
                       target="_blank" 
                       rel="noopener noreferrer"
+                      aria-label="GitHub Repository"
                     >
                       <ArrowTopRightOnSquareIcon className="w-4 h-4" />
-                      <span>GitHub</span>
                     </a>
-                  </li>
-                </ul>
-              </nav>
-              <div className="flex items-center gap-3">
-                <a href="#getting-started" className="hidden sm:block text-sm bg-primary text-white px-3 py-1 rounded-full hover:bg-primary/90 transition-colors">
-                  Get Started
-                </a>
-                <button className="md:hidden">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="3" y1="12" x2="21" y2="12"></line>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <line x1="3" y1="18" x2="21" y2="18"></line>
-                  </svg>
-                </button>
+                  </div>
+                </div>
+
+                {/* Mobile menu button - changed from button to label */}
+                <label 
+                  htmlFor="mobile-menu-toggle"
+                  className="block md:hidden p-2 rounded-md hover:bg-secondary/80 transition-colors btn-ripple cursor-pointer"
+                  aria-label="Toggle mobile menu"
+                >
+                  <Bars3Icon className="w-6 h-6" />
+                </label>
               </div>
             </div>
           </header>
+          
+          {/* Hidden checkbox for mobile menu toggle state */}
+          <input type="checkbox" id="mobile-menu-toggle" className="hidden" />
+          
+          {/* Mobile Navigation - controlled by checkbox state */}
+          <MobileNavigation 
+            items={navItems} 
+          />
           
           <main className="flex-1 relative z-0">
             {children}
@@ -270,87 +340,92 @@ export default function RootLayout({
             </div>
           </footer>
           
-          {/* Enhanced client-side JS for interaction effects */}
+          {/* Client-side JS for additional interactive effects - remove scroll indicator code */}
           <script dangerouslySetInnerHTML={{
             __html: `
               document.addEventListener('DOMContentLoaded', () => {
-                // Cursor effects
-                const cursorDot = document.querySelector('.cursor-dot');
-                const cursorOutline = document.querySelector('.cursor-dot-outline');
+                // Mobile menu toggle
+                const menuToggle = document.getElementById('mobile-menu-toggle');
+                const mobileMenu = document.getElementById('mobile-menu');
+                const mobileMenuButton = document.getElementById('mobile-menu-button');
+                const mobileMenuClose = document.getElementById('mobile-menu-close');
                 
-                if (cursorDot && cursorOutline) {
-                  window.addEventListener('mousemove', (e) => {
-                    const posX = e.clientX;
-                    const posY = e.clientY;
-                    
-                    cursorDot.style.left = \`\${posX}px\`;
-                    cursorDot.style.top = \`\${posY}px\`;
-                    
-                    // Delay outline movement for trail effect
-                    setTimeout(() => {
-                      cursorOutline.style.left = \`\${posX}px\`;
-                      cursorOutline.style.top = \`\${posY}px\`;
-                    }, 100);
-                  });
-                  
-                  // Scale effect on interactive elements
-                  const interactiveElements = document.querySelectorAll('a, button, .interactive-btn, .hover-3d');
-                  interactiveElements.forEach(el => {
-                    el.addEventListener('mouseenter', () => {
-                      cursorDot.style.transform = 'translate(-50%, -50%) scale(0.5)';
-                      cursorOutline.style.transform = 'translate(-50%, -50%) scale(1.5)';
-                      cursorOutline.style.borderColor = 'var(--primary)';
-                    });
-                    
-                    el.addEventListener('mouseleave', () => {
-                      cursorDot.style.transform = 'translate(-50%, -50%) scale(1)';
-                      cursorOutline.style.transform = 'translate(-50%, -50%) scale(1)';
-                      cursorOutline.style.borderColor = 'var(--primary)';
-                    });
+                if (menuToggle && mobileMenu && mobileMenuButton) {
+                  menuToggle.addEventListener('change', function() {
+                    if (this.checked) {
+                      mobileMenu.classList.remove('translate-x-full');
+                      document.body.style.overflow = 'hidden';
+                    } else {
+                      mobileMenu.classList.add('translate-x-full');
+                      document.body.style.overflow = '';
+                    }
                   });
                 }
                 
-                // Magnetic effect for buttons
-                const magneticBtns = document.querySelectorAll('.magnetic-btn');
+                if (mobileMenuClose) {
+                  mobileMenuClose.addEventListener('click', () => {
+                    if (menuToggle) menuToggle.checked = false;
+                  });
+                }
                 
-                magneticBtns.forEach(btn => {
-                  btn.addEventListener('mousemove', (e) => {
-                    const rect = btn.getBoundingClientRect();
-                    const x = e.clientX - rect.left - rect.width / 2;
-                    const y = e.clientY - rect.top - rect.height / 2;
+                // Button ripple effect
+                document.addEventListener('click', function(e) {
+                  const target = e.target;
+                  if (target.classList.contains('btn-ripple') || target.closest('.btn-ripple')) {
+                    const button = target.classList.contains('btn-ripple') ? target : target.closest('.btn-ripple');
+                    const rect = button.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
                     
-                    // Move button slightly towards cursor
-                    btn.style.transform = \`translate(\${x * 0.1}px, \${y * 0.1}px)\`;
-                  });
-                  
-                  btn.addEventListener('mouseleave', () => {
-                    btn.style.transform = 'translate(0, 0)';
-                  });
+                    const ripple = document.createElement('span');
+                    ripple.className = 'ripple';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    
+                    button.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                      ripple.remove();
+                    }, 800);
+                  }
                 });
                 
-                // Add visible class when document is loaded
-                document.querySelectorAll('.reveal-section').forEach(section => {
-                  const observer = new IntersectionObserver(entries => {
-                    entries.forEach(entry => {
-                      if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        observer.unobserve(entry.target);
-                      }
-                    });
-                  });
-                  
-                  observer.observe(section);
-                });
+                // Highlight active section in navigation based on scroll position
+                const sections = document.querySelectorAll('section[id]');
+                const navLinks = document.querySelectorAll('.nav-pill');
                 
-                // Initialize flip cards
-                document.querySelectorAll('.flip-card-trigger').forEach(trigger => {
-                  trigger.addEventListener('click', (e) => {
-                    const card = e.currentTarget.closest('.flip-card');
-                    if (card) {
-                      card.classList.toggle('flipped');
+                const updateActiveLink = () => {
+                  const scrollPosition = window.scrollY + 100;
+                  
+                  sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.offsetHeight;
+                    const sectionId = section.getAttribute('id');
+                    
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                      navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === '#' + sectionId) {
+                          link.classList.add('active');
+                        }
+                      });
                     }
                   });
-                });
+                }
+                
+                window.addEventListener('scroll', updateActiveLink);
+                updateActiveLink();
+                
+                // Interactive audio toggle (optional feature)
+                const audioToggleButton = document.getElementById('audio-toggle');
+                if (audioToggleButton) {
+                  audioToggleButton.addEventListener('click', () => {
+                    const isEnabled = localStorage.getItem('audioFeedback') !== 'disabled';
+                    localStorage.setItem('audioFeedback', isEnabled ? 'disabled' : 'enabled');
+                    audioToggleButton.setAttribute('aria-pressed', (!isEnabled).toString());
+                    audioToggleButton.querySelector('span').textContent = isEnabled ? 'Sound Off' : 'Sound On';
+                  });
+                }
               });
             `
           }} />

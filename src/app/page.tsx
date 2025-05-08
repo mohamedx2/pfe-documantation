@@ -9,13 +9,8 @@ import {
   RocketLaunchIcon,
   CubeTransparentIcon,
   ArrowPathIcon,
-  BookOpenIcon,
   GlobeAltIcon,
-  UsersIcon,
-  HeartIcon,
-  BuildingLibraryIcon,
-  CalendarIcon,
-  MapPinIcon,
+  
   CursorArrowRippleIcon,
   ArrowTrendingUpIcon
 } from "@heroicons/react/24/outline";
@@ -24,18 +19,12 @@ import {
   DocumentTextIcon,
   BoltIcon,
   PuzzlePieceIcon,
-  CloudArrowUpIcon,
-  LightBulbIcon,
-  SparklesIcon,
-  StarIcon,
-  ChatBubbleLeftRightIcon
 } from "@heroicons/react/24/solid";
 import FloatingCard from "@/components/FloatingCard";
 import RevealOnScroll from "@/components/RevealOnScroll";
 
 export default function Home() {
   // State for interactive elements
-  const [activeTab, setActiveTab] = useState('hooks');
   const [scrollPosition, setScrollPosition] = useState(0);
   const [particleCount, setParticleCount] = useState(0);
   
