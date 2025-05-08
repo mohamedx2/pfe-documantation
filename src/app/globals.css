@@ -65,19 +65,32 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Improved dark mode variables for better contrast */
+.dark:root {
+  --background: #0D1117;
+  --foreground: #F0F6FC;
+  --secondary: #21262D;
+  --secondary-foreground: #f4f7fb;
+  --primary: #58A6FF;
+  --primary-light: #79B8FF;
+  --primary-dark: #388BFD;
+  --accent: #F0883E;
+  --accent-light: #FFCA7A;
+  --accent-dark: #E07C00;
+  --tertiary: #1E293B;
+  --gold: #FFD700;
+  --turquoise: #08A4BD;
+  --ruby: #E63946;
+  --purple: #9B5DE5;
+  --success: #4CAF50;
+  --warning: #FF9800;
+  --error: #F44336;
+  --info: #2196F3;
+}
+
+/* Remove the media query-based dark mode in favor of class-based dark mode */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0D1117;
-    --foreground: #F0F6FC;
-    --secondary: #21262D;
-    --secondary-foreground: #f4f7fb;
-    --primary: #58A6FF;
-    --primary-light: #79B8FF;
-    --primary-dark: #388BFD;
-    --accent: #F0883E;
-    --accent-light: #FFCA7A;
-    --tertiary: #1E293B;
-  }
+  /* This block can be removed if you want to only use the class-based approach */
 }
 
 /* Enhanced typography */
@@ -657,6 +670,23 @@ pre code {
 .dark .glass-card {
   background: rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark .glass-morphism {
+  background: rgba(13, 17, 23, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dark .feature-card {
+  background: rgba(21, 32, 43, 0.4);
+}
+
+.dark .code-block {
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+.dark .btn-interactive {
+  box-shadow: 0 4px 20px rgba(88, 166, 255, 0.3);
 }
 
 /* Interactive cards with content switch */
