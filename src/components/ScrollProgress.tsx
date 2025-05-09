@@ -1,68 +1,185 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useState, useEffect, ReactNode } from 'react';
 
 interface ScrollProgressProps {
-  color?: string;
-  height?: number;
-  position?: 'top' | 'bottom';
-  showPercentage?: boolean;
+  children: (progress: number) => ReactNode;
+  containerRef?: React.RefObject<HTMLElement>;
+  onProgressChange?: (progress: number) => void;
+  debounceMs?: number;
 }
 
 const ScrollProgress: React.FC<ScrollProgressProps> = ({
-  color = 'var(--primary)',
-  height = 4,
-  position = 'top',
-  showPercentage = false,
+  children,
+  containerRef,
+  onProgressChange,
+  debounceMs = 10,
 }) => {
   const [scrollProgress, setScrollProgress] = useState(0);
-
+  const [, setScrollDirection] = useState<'up' | 'down' | null>(null);
+  const [prevScrollY, setPrevScrollY] = useState(0);
+  
+  // Debounce implementation for better performance
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    let lastScrollTime = 0;
+    
     const calculateScrollProgress = () => {
-      const scrollY = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight;
-      const winHeight = window.innerHeight;
-      const scrollPercent = scrollY / (docHeight - winHeight);
-      setScrollProgress(scrollPercent * 100);
+      const currentTime = Date.now();
+      
+      // Check if we need to debounce
+      if (currentTime - lastScrollTime < debounceMs) {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(calculateScrollProgress, debounceMs);
+        return;
+      }
+      
+      lastScrollTime = currentTime;
+      
+      const currentScrollY = window.scrollY;
+      
+      // Determine scroll direction
+      if (currentScrollY > prevScrollY) {
+        setScrollDirection('down');
+      } else if (currentScrollY < prevScrollY) {
+        setScrollDirection('up');
+      }
+      
+      setPrevScrollY(currentScrollY);
+      
+      // If a container reference is provided, calculate progress relative to that container
+      if (containerRef && containerRef.current) {
+        const container = containerRef.current;
+        const rect = container.getBoundingClientRect();
+        
+        // Calculate how much of the container is visible
+        const visibleHeight = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
+        
+        // Only report progress when the element is in view
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          // If element is taller than viewport, use scroll position relative to element
+          if (container.offsetHeight > window.innerHeight) {
+            const totalScroll = container.offsetHeight - window.innerHeight;
+            const currentScroll = -rect.top;
+            const progress = Math.max(0, Math.min(100, (currentScroll / totalScroll) * 100));
+            setScrollProgress(progress);
+          } else {
+            // For smaller elements, use percentage of element visible in viewport
+            const progress = Math.max(0, Math.min(100, (visibleHeight / container.offsetHeight) * 100));
+            setScrollProgress(progress);
+          }
+        }
+      } else {
+        // Calculate overall page scroll progress
+        const docHeight = document.documentElement.scrollHeight;
+        const winHeight = window.innerHeight;
+        const scrollPercent = currentScrollY / (docHeight - winHeight);
+        setScrollProgress(Math.round(scrollPercent * 100 * 100) / 100);
+      }
     };
-
+    
     // Initial calculation
     calculateScrollProgress();
-
-    // Add event listener
-    window.addEventListener('scroll', calculateScrollProgress);
-
+    
+    // Add scroll event listener
+    window.addEventListener('scroll', calculateScrollProgress, { passive: true });
+    
+    // Notify on progress change
+    if (onProgressChange) {
+      onProgressChange(scrollProgress);
+    }
+    
     // Cleanup
-    return () => window.removeEventListener('scroll', calculateScrollProgress);
-  }, []);
+    return () => {
+      window.removeEventListener('scroll', calculateScrollProgress);
+      clearTimeout(timeoutId);
+    };
+  }, [containerRef, debounceMs, onProgressChange, prevScrollY, scrollProgress]);
+  
+  // Pass scroll metadata to children
 
-  return (
-    <>
-      <div 
-        className="fixed left-0 z-50"
-        style={{
-          top: position === 'top' ? 0 : 'auto',
-          bottom: position === 'bottom' ? 0 : 'auto',
-          height: `${height}px`,
-          width: `${scrollProgress}%`,
-          backgroundColor: color,
-          transition: 'width 0.1s',
-        }}
-      />
+
+  return <>{children(scrollProgress)}</>;
+};
+
+// Hook version for simpler usage in functional components
+export const useScrollProgress = (
+  options: {
+    containerRef?: React.RefObject<HTMLElement>;
+    debounceMs?: number;
+  } = {}
+): { progress: number; direction: 'up' | 'down' | null } => {
+  const [progress, setProgress] = useState(0);
+  const [direction, setDirection] = useState<'up' | 'down' | null>(null);
+  const [prevScrollY, setPrevScrollY] = useState(0);
+  const { containerRef, debounceMs = 10 } = options;
+  
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    let lastScrollTime = 0;
+    
+    const calculateScrollProgress = () => {
+      const currentTime = Date.now();
       
-      {showPercentage && (
-        <div 
-          className="fixed right-4 bg-background/80 backdrop-blur-sm rounded-full border border-primary/20 shadow-md px-3 py-1 text-xs font-semibold"
-          style={{
-            bottom: position === 'bottom' ? height + 10 : 'auto',
-            top: position === 'top' ? height + 10 : 'auto',
-          }}
-        >
-          {Math.round(scrollProgress)}%
-        </div>
-      )}
-    </>
-  );
+      // Check if we need to debounce
+      if (currentTime - lastScrollTime < debounceMs) {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(calculateScrollProgress, debounceMs);
+        return;
+      }
+      
+      lastScrollTime = currentTime;
+      
+      const currentScrollY = window.scrollY;
+      
+      // Determine scroll direction
+      if (currentScrollY > prevScrollY) {
+        setDirection('down');
+      } else if (currentScrollY < prevScrollY) {
+        setDirection('up');
+      }
+      
+      setPrevScrollY(currentScrollY);
+      
+      // Calculate progress
+      if (containerRef && containerRef.current) {
+        const container = containerRef.current;
+        const rect = container.getBoundingClientRect();
+        
+        // Calculate visibility progress for the container
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          if (container.offsetHeight > window.innerHeight) {
+            const totalScroll = container.offsetHeight - window.innerHeight;
+            const currentScroll = -rect.top;
+            setProgress(Math.max(0, Math.min(100, (currentScroll / totalScroll) * 100)));
+          } else {
+            const visibleHeight = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
+            setProgress(Math.max(0, Math.min(100, (visibleHeight / container.offsetHeight) * 100)));
+          }
+        }
+      } else {
+        // Overall page scroll progress
+        const docHeight = document.documentElement.scrollHeight;
+        const winHeight = window.innerHeight;
+        const scrollPercent = currentScrollY / (docHeight - winHeight);
+        setProgress(Math.min(100, Math.max(0, scrollPercent * 100)));
+      }
+    };
+    
+    // Initial calculation
+    calculateScrollProgress();
+    
+    // Add scroll event listener
+    window.addEventListener('scroll', calculateScrollProgress, { passive: true });
+    
+    // Cleanup
+    return () => {
+      window.removeEventListener('scroll', calculateScrollProgress);
+      clearTimeout(timeoutId);
+    };
+  }, [containerRef, debounceMs, prevScrollY]);
+  
+  return { progress, direction };
 };
 
 export default ScrollProgress;

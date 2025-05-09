@@ -21,15 +21,11 @@ const RevealOnScroll: React.FC<RevealOnScrollProps> = ({
         if (entry.isIntersecting) {
           // Add delay if specified
           setTimeout(() => {
-            if (ref.current) {
-              ref.current.classList.add('visible');
-            }
+            entry.target.classList.add('visible');
           }, delay);
           
           // Once revealed, unobserve
-          if (ref.current) {
-            observer.unobserve(ref.current);
-          }
+          observer.unobserve(entry.target);
         }
       },
       { threshold }
