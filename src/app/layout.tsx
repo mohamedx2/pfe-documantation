@@ -131,9 +131,9 @@ export default function RootLayout({
                     </div>
                     <div className="absolute right-0 mt-1 w-40 glass-morphism rounded-md shadow-lg border border-primary/10 hidden group-hover:block z-50 transform transition-all duration-300 origin-top-right scale-90 group-hover:scale-100">
                       <div className="py-1">
-                        <a href="#" className="block px-4 py-2 text-sm hover:text-primary transition-colors">English</a>
-                        <a href="#" className="block px-4 py-2 text-sm hover:text-primary transition-colors arabic-text text-right">العربية</a>
-                        <a href="#" className="block px-4 py-2 text-sm hover:text-primary transition-colors">Français</a>
+                        <Link href="#" className="block px-4 py-2 text-sm hover:text-primary transition-colors">English</Link>
+                        <Link href="#" className="block px-4 py-2 text-sm hover:text-primary transition-colors arabic-text text-right">العربية</Link>
+                        <Link href="#" className="block px-4 py-2 text-sm hover:text-primary transition-colors">Français</Link>
                       </div>
                     </div>
                   </div>
@@ -172,42 +172,42 @@ export default function RootLayout({
                   <div className="hidden md:flex items-center gap-8">
                     <ul className="flex space-x-6">
                       <li>
-                        <a href="#features" className="nav-pill flex items-center gap-1.5">
+                        <Link href="#features" className="nav-pill flex items-center gap-1.5">
                           <Squares2X2Icon className="w-4 h-4" />
                           <span>Features</span>
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="#docs" className="nav-pill flex items-center gap-1.5">
+                        <Link href="docs" className="nav-pill flex items-center gap-1.5">
                           <BookOpenIcon className="w-4 h-4" />
                           <span>Docs</span>
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="#examples" className="nav-pill flex items-center gap-1.5">
+                        <Link href="#examples" className="nav-pill flex items-center gap-1.5">
                           <CodeBracketIcon className="w-4 h-4" />
                           <span>Examples</span>
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="#community" className="nav-pill flex items-center gap-1.5">
+                        <Link href="#community" className="nav-pill flex items-center gap-1.5">
                           <GlobeAltIcon className="w-4 h-4" />
                           <span>One Culture</span>
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="#arabic-dev" className="nav-pill flex items-center gap-1.5">
+                        <Link href="#arabic-dev" className="nav-pill flex items-center gap-1.5">
                           <ChatBubbleLeftRightIcon className="w-4 h-4" />
                           <span>Arabic Community</span>
-                        </a>
+                        </Link>
                       </li>
                     </ul>
                     
                     <div className="flex items-center gap-3">
-                      <a href="#getting-started" className="btn-interactive text-sm px-5 py-1.5 rounded-full">
+                      <Link href="#getting-started" className="btn-interactive text-sm px-5 py-1.5 rounded-full">
                         Get Started
-                      </a>
-                      <a 
+                      </Link>
+                      <Link 
                         href="https://github.com/hamroun/frontend-hamroun" 
                         className="p-2 rounded-full bg-secondary hover:bg-secondary/80 transition-colors"
                         target="_blank" 
@@ -215,7 +215,7 @@ export default function RootLayout({
                         aria-label="GitHub Repository"
                       >
                         <ArrowTopRightOnSquareIcon className="w-4 h-4" />
-                      </a>
+                      </Link>
                     </div>
                   </div>
 

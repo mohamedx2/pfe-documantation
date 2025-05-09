@@ -1681,7 +1681,6 @@ pre code {
   opacity: 1;
 }
 
-/* Dark mode card styling */
 .dark .docs-card {
   background-color: rgba(30, 41, 59, 0.5);
   border-color: rgba(88, 166, 255, 0.1);
@@ -1705,6 +1704,74 @@ pre code {
   flex: 1;
 }
 
+/* Card variants */
+.docs-card.showcase {
+  padding: 1.5rem;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.docs-card.showcase:hover {
+  transform: translateY(-5px) scale(1.01);
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.1);
+}
+
+.docs-card.showcase:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, transparent, rgba(14, 124, 134, 0.05));
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.docs-card.showcase:hover:before {
+  opacity: 1;
+}
+
+.docs-card.interactive {
+  overflow: visible;
+}
+
+.docs-card.interactive:before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  background: linear-gradient(to right, var(--primary), var(--accent), var(--primary));
+  border-radius: calc(var(--radius-lg) + 5px);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.docs-card.interactive:hover:before {
+  opacity: 0.3;
+}
+
+.docs-card.minimal {
+  box-shadow: none;
+  background: transparent;
+}
+
+.docs-card.minimal:hover {
+  background: rgba(var(--primary-rgb, 14, 124, 134), 0.05);
+}
+
+/* Card with image preview */
+.docs-card img {
+  max-width: 100%;
+  height: auto;
+  transition: transform 0.5s ease;
+}
+
+.docs-card:hover img {
+  transform: scale(1.02);
+}
+
 .docs-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -1715,6 +1782,47 @@ pre code {
   .docs-grid {
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   }
+}
+
+/* Enhanced tooltip for docs cards */
+.docs-card .card-tooltip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--primary);
+  color: white;
+  padding: 0.5rem;
+  font-size: 0.8rem;
+  transform: translateY(-100%);
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.docs-card:hover .card-tooltip {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Card image hover effects */
+.docs-card .preview-image {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+}
+
+.docs-card .preview-image:after {
+  content: 'Preview';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.7rem;
+  border-top-left-radius: var(--radius-md);
 }
 
 /* Documentation section styles */

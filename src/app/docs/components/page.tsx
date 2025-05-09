@@ -1,5 +1,5 @@
+/* eslint-disable react/jsx-no-undef */
 'use client';
-
 import React, { useState, useEffect, useMemo } from 'react';
 import DocsCard from '@/components/DocsCard';
 import AnimatedTabs from '@/components/AnimatedTabs';
@@ -31,13 +31,13 @@ import {
   ComputerDesktopIcon,
   SunIcon,
   MoonIcon,
-  TableCellsIcon as TableIcon,
   VideoCameraIcon,
   BookOpenIcon,
   LinkIcon,
   StarIcon,
+  ViewColumnsIcon,
   Squares2X2Icon,
-  ArrowTopRightOnSquareIcon
+  RectangleGroupIcon
 } from '@heroicons/react/24/outline';
 import { 
   DocumentTextIcon,
@@ -49,9 +49,10 @@ export default function ComponentsPage() {
   const [activeCategory, setActiveCategory] = useState('all');
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [devicePreview, setDevicePreview] = useState<'desktop' | 'mobile'>('desktop');
-  const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const [bookmarkedComponents, setBookmarkedComponents] = useState<string[]>([]);
+  const [layoutMode, setLayoutMode] = useState<'grid' | 'compact' | 'showcase'>('grid');
+  const [cardSize, setCardSize] = useState<'sm' | 'md' | 'lg'>('md');
   
   // Load bookmarks and search history from localStorage
   useEffect(() => {
@@ -98,7 +99,6 @@ export default function ComponentsPage() {
   };
   
   // Component data with categories
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const components = [
     // Core Components
     {
@@ -108,7 +108,18 @@ export default function ComponentsPage() {
       link: "/docs/components/virtual-dom",
       tags: ["Core", "Performance"],
       category: "core",
-      isNew: true
+      isNew: true,
+      usageCount: 42,
+      rating: 4.9,
+      contributors: 7,
+      lastUpdated: "2 days ago",
+      previewImage: "/images/components/virtualdom-preview.png",
+      codePreview: `import { createVirtualElement } from 'frontend-hamroun';
+
+const vdom = createVirtualElement('div', { className: 'container' }, 
+  createVirtualElement('h1', null, 'Hello World'),
+  createVirtualElement('p', null, 'Virtual DOM example')
+);`
     },
     {
       title: "Component Architecture",
@@ -116,7 +127,20 @@ export default function ComponentsPage() {
       description: "Create reusable UI components with declarative syntax",
       link: "/docs/components/architecture",
       tags: ["Core"],
-      category: "core"
+      category: "core",
+      usageCount: 38,
+      rating: 4.7,
+      contributors: 12,
+      lastUpdated: "1 week ago",
+      previewImage: "/images/components/architecture-preview.png",
+      codePreview: `function Greeting({ name }) {
+  return (
+    <div>
+      <h1>Hello, {name}!</h1>
+      <p>Welcome to Frontend Hamroun.</p>
+    </div>
+  );
+}`
     },
     {
       title: "Context API",
@@ -125,7 +149,23 @@ export default function ComponentsPage() {
       link: "/docs/components/context",
       tags: ["State Management"],
       category: "core",
-      isUpdated: true
+      isUpdated: true,
+      usageCount: 27,
+      rating: 4.6,
+      contributors: 5,
+      lastUpdated: "3 days ago",
+      previewImage: "/images/components/context-preview.png",
+      codePreview: `import { createContext, useContext } from 'frontend-hamroun';
+
+const ThemeContext = createContext('light');
+
+function ThemeProvider({ children }) {
+  return (
+    <ThemeContext.Provider value="dark">
+      {children}
+    </ThemeContext.Provider>
+  );
+}`
     },
     {
       title: "Suspense",
@@ -133,10 +173,24 @@ export default function ComponentsPage() {
       description: "Handle asynchronous operations with components that wait for data",
       link: "/docs/components/suspense",
       tags: ["Loading", "Advanced"],
-      category: "core"
+      category: "core",
+      usageCount: 18,
+      rating: 4.5,
+      contributors: 4,
+      lastUpdated: "2 weeks ago",
+      previewImage: "/images/components/suspense-preview.png",
+      codePreview: `import { Suspense } from 'frontend-hamroun';
+
+function App() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <UserProfile />
+    </Suspense>
+  );
+}`
     },
     
-    // Special Features
+    // Special Features - enhanced with more metadata
     {
       title: "Client Components",
       icon: <WindowIcon className="w-5 h-5" />,
@@ -144,7 +198,28 @@ export default function ComponentsPage() {
       link: "/docs/components/client",
       tags: ["Client-side"],
       category: "special",
-      variant: "primary"
+      variant: "primary",
+      usageCount: 31,
+      rating: 4.8,
+      contributors: 9,
+      lastUpdated: "5 days ago",
+      previewImage: "/images/components/client-preview.png",
+      codePreview: `'use client';
+
+import { useState } from 'frontend-hamroun';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+  
+  return (
+    <div>
+      <h1>Count: {count}</h1>
+      <button onClick={() => setCount(count + 1)}>
+        Increment
+      </button>
+    </div>
+  );
+}`
     },
     {
       title: "Server Components",
@@ -154,17 +229,52 @@ export default function ComponentsPage() {
       tags: ["Server-side"],
       category: "special",
       variant: "primary",
-      isNew: true
+      isNew: true,
+      usageCount: 23,
+      rating: 4.9,
+      contributors: 6,
+      lastUpdated: "1 day ago",
+      previewImage: "/images/components/server-preview.png",
+      codePreview: `async function DashboardPage() {
+  // This runs on the server
+  const data = await fetchDashboardData();
+  
+  return (
+    <main>
+      <h1>{data.title}</h1>
+      <DashboardMetrics metrics={data.metrics} />
+    </main>
+  );
+}`
     },
     
-    // UI Components
+    // UI Components - enhanced with more metadata
     {
       title: "Button",
       icon: <RocketLaunchIcon className="w-5 h-5" />,
       description: "Interactive buttons with various styles and animations",
       link: "/docs/components/button",
       tags: ["UI", "Interactive"],
-      category: "ui"
+      category: "ui",
+      usageCount: 45,
+      rating: 4.9,
+      contributors: 15,
+      lastUpdated: "3 days ago",
+      isPopular: true,
+      previewImage: "/images/components/button-preview.png",
+      codePreview: `import { Button } from 'frontend-hamroun/ui';
+
+function SaveButton() {
+  return (
+    <Button 
+      variant="primary"
+      icon={<SaveIcon />}
+      onClick={() => saveData()}
+    >
+      Save Changes
+    </Button>
+  );
+}`
     },
     {
       title: "Card",
@@ -173,7 +283,26 @@ export default function ComponentsPage() {
       link: "/docs/components/card",
       tags: ["UI", "Layout"],
       category: "ui",
-      isUpdated: true
+      isUpdated: true,
+      usageCount: 39,
+      rating: 4.7,
+      contributors: 8,
+      lastUpdated: "1 week ago",
+      previewImage: "/images/components/card-preview.png",
+      codePreview: `import { Card } from 'frontend-hamroun/ui';
+
+function FeatureCard() {
+  return (
+    <Card
+      title="Interactive UI"
+      description="Build engaging interfaces"
+      image="/images/feature.png"
+      variant="hover"
+    >
+      <Button>Learn More</Button>
+    </Card>
+  );
+}`
     },
     {
       title: "Modal",
@@ -181,7 +310,33 @@ export default function ComponentsPage() {
       description: "Popup dialogs and modal windows with accessibility features",
       link: "/docs/components/modal",
       tags: ["UI", "Overlay"],
-      category: "ui"
+      category: "ui",
+      usageCount: 35,
+      rating: 4.6,
+      contributors: 7,
+      lastUpdated: "2 weeks ago",
+      previewImage: "/images/components/modal-preview.png",
+      codePreview: `import { Modal } from 'frontend-hamroun/ui';
+
+function App() {
+  const [isOpen, setIsOpen] = useState(false);
+  
+  return (
+    <>
+      <button onClick={() => setIsOpen(true)}>
+        Open Modal
+      </button>
+      
+      <Modal 
+        isOpen={isOpen} 
+        onClose={() => setIsOpen(false)}
+      >
+        <h2>Modal Content</h2>
+        <p>This is a modal dialog</p>
+      </Modal>
+    </>
+  );
+}`
     },
     {
       title: "Calendar",
@@ -190,17 +345,58 @@ export default function ComponentsPage() {
       link: "/docs/components/calendar",
       tags: ["UI", "Date"],
       category: "ui",
-      isNew: true
+      isNew: true,
+      usageCount: 22,
+      rating: 4.8,
+      contributors: 5,
+      lastUpdated: "4 days ago",
+      previewImage: "/images/components/calendar-preview.png",
+      codePreview: `import { Calendar } from 'frontend-hamroun/ui';
+
+function DatePicker() {
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  
+  return (
+    <Calendar
+      value={selectedDate}
+      onChange={setSelectedDate}
+      locale="en-US"
+      weekStartsOn={0}
+    />
+  );
+}`
     },
     
-    // Data Display
+    // Data Display Components with metadata
     {
       title: "Table",
       icon: <TableCellsIcon className="w-5 h-5" />,
       description: "Responsive tables with sorting, filtering, and pagination",
       link: "/docs/components/table",
       tags: ["Data", "Display"],
-      category: "data"
+      category: "data",
+      usageCount: 33,
+      rating: 4.7,
+      contributors: 10,
+      lastUpdated: "1 week ago",
+      previewImage: "/images/components/table-preview.png",
+      codePreview: `import { Table } from 'frontend-hamroun/ui';
+
+function UserTable({ users }) {
+  return (
+    <Table
+      data={users}
+      columns={[
+        { key: 'name', header: 'Name' },
+        { key: 'email', header: 'Email' },
+        { key: 'role', header: 'Role' }
+      ]}
+      sortable
+      paginate
+      rowsPerPage={10}
+    />
+  );
+}`
     },
     {
       title: "Chart",
@@ -208,7 +404,26 @@ export default function ComponentsPage() {
       description: "Data visualization with interactive charts and graphs",
       link: "/docs/components/chart",
       tags: ["Data", "Display"],
-      category: "data"
+      category: "data",
+      usageCount: 28,
+      rating: 4.6,
+      contributors: 8,
+      lastUpdated: "10 days ago",
+      previewImage: "/images/components/chart-preview.png",
+      codePreview: `import { LineChart } from 'frontend-hamroun/charts';
+
+function RevenueChart({ data }) {
+  return (
+    <LineChart
+      data={data}
+      xAxis={{ key: 'month', label: 'Month' }}
+      yAxis={{ key: 'revenue', label: 'Revenue ($)' }}
+      colors={['#0E7C86']}
+      animate={true}
+      tooltip
+    />
+  );
+}`
     },
   ];
 
@@ -333,6 +548,32 @@ function FeatureCard() {
     }
   ];
 
+  // Define allowed DocsCard variant types
+  type DocsCardVariant = 'showcase' | 'primary' | 'minimal' | 'default' | 'accent' | 'interactive' | undefined;
+  
+  // Get card variant and size based on layout mode
+  const getCardVariant = (component: { title: string; icon: React.JSX.Element; description: string; link: string; tags: string[]; category: string; isNew: boolean; usageCount: number; rating: number; contributors: number; lastUpdated: string; previewImage: string; codePreview: string; isUpdated?: undefined; variant?: undefined; isPopular?: undefined; } | { title: string; icon: React.JSX.Element; description: string; link: string; tags: string[]; category: string; usageCount: number; rating: number; contributors: number; lastUpdated: string; previewImage: string; codePreview: string; isNew?: undefined; isUpdated?: undefined; variant?: undefined; isPopular?: undefined; } | { title: string; icon: React.JSX.Element; description: string; link: string; tags: string[]; category: string; isUpdated: boolean; usageCount: number; rating: number; contributors: number; lastUpdated: string; previewImage: string; codePreview: string; isNew?: undefined; variant?: undefined; isPopular?: undefined; } | { title: string; icon: React.JSX.Element; description: string; link: string; tags: string[]; category: string; variant: string; usageCount: number; rating: number; contributors: number; lastUpdated: string; previewImage: string; codePreview: string; isNew?: undefined; isUpdated?: undefined; isPopular?: undefined; } | { title: string; icon: React.JSX.Element; description: string; link: string; tags: string[]; category: string; variant: string; isNew: boolean; usageCount: number; rating: number; contributors: number; lastUpdated: string; previewImage: string; codePreview: string; isUpdated?: undefined; isPopular?: undefined; } | { title: string; icon: React.JSX.Element; description: string; link: string; tags: string[]; category: string; usageCount: number; rating: number; contributors: number; lastUpdated: string; isPopular: boolean; previewImage: string; codePreview: string; isNew?: undefined; isUpdated?: undefined; variant?: undefined; }): DocsCardVariant => {
+    if (layoutMode === 'showcase') {
+      return 'showcase';
+    }
+    if (layoutMode === 'compact') {
+      // Ensure variant is one of the allowed types or default to 'minimal'
+      const variant = component.variant as DocsCardVariant;
+      return (variant === 'primary' || variant === 'minimal' || variant === 'default' || 
+              variant === 'accent' || variant === 'interactive') ? variant : 'minimal';
+    }
+    // Ensure variant is one of the allowed types or default to 'default'
+    const variant = component.variant as DocsCardVariant;
+    return (variant === 'primary' || variant === 'minimal' || variant === 'default' || 
+            variant === 'accent' || variant === 'interactive') ? variant : 'default';
+  };
+  
+  const getCardSize = () => {
+    if (layoutMode === 'showcase') return 'lg';
+    if (layoutMode === 'compact') return 'sm';
+    return cardSize;
+  };
+
   return (
     <div className="docs-section">
       <h1 className="text-3xl font-bold mb-6">Components</h1>
@@ -406,23 +647,57 @@ function FeatureCard() {
         {/* View Options */}
         <div className="flex items-center justify-between mt-4 pt-4 border-t border-primary/10">
           <div className="flex items-center gap-4">
-            {/* View Mode Toggle */}
+            {/* Layout Mode Toggle */}
             <div className="flex items-center bg-secondary/50 rounded-full p-1">
               <button
-                className={`p-1.5 rounded-full ${viewMode === 'grid' ? 'bg-primary text-white' : 'text-foreground/70'}`}
-                onClick={() => setViewMode('grid')}
+                className={`p-1.5 rounded-full ${layoutMode === 'grid' ? 'bg-primary text-white' : 'text-foreground/70'}`}
+                onClick={() => setLayoutMode('grid')}
                 title="Grid View"
               >
                 <Squares2X2Icon className="w-4 h-4" />
               </button>
               <button
-                className={`p-1.5 rounded-full ${viewMode === 'table' ? 'bg-primary text-white' : 'text-foreground/70'}`}
-                onClick={() => setViewMode('table')}
-                title="Table View"
+                className={`p-1.5 rounded-full ${layoutMode === 'showcase' ? 'bg-primary text-white' : 'text-foreground/70'}`}
+                onClick={() => setLayoutMode('showcase')}
+                title="Showcase View"
               >
-                <TableIcon className="w-4 h-4" />
+                <RectangleGroupIcon className="w-4 h-4" />
+              </button>
+              <button
+                className={`p-1.5 rounded-full ${layoutMode === 'compact' ? 'bg-primary text-white' : 'text-foreground/70'}`}
+                onClick={() => setLayoutMode('compact')}
+                title="Compact View"
+              >
+                <ViewColumnsIcon className="w-4 h-4" />
               </button>
             </div>
+            
+            {/* Grid Layout - Card Size */}
+            {layoutMode === 'grid' && (
+            <div className="flex items-center bg-secondary/50 rounded-full p-1">
+              <button
+                className={`p-1.5 rounded-full ${cardSize === 'sm' ? 'bg-primary text-white' : 'text-foreground/70'}`}
+                onClick={() => setCardSize('sm')}
+                title="Small Cards"
+              >
+                <span className="text-xs">S</span>
+              </button>
+              <button
+                className={`p-1.5 rounded-full ${cardSize === 'md' ? 'bg-primary text-white' : 'text-foreground/70'}`}
+                onClick={() => setCardSize('md')}
+                title="Medium Cards"
+              >
+                <span className="text-xs">M</span>
+              </button>
+              <button
+                className={`p-1.5 rounded-full ${cardSize === 'lg' ? 'bg-primary text-white' : 'text-foreground/70'}`}
+                onClick={() => setCardSize('lg')}
+                title="Large Cards"
+              >
+                <span className="text-xs">L</span>
+              </button>
+            </div>
+            )}
             
             {/* Theme Toggle */}
             <div className="flex items-center bg-secondary/50 rounded-full p-1">
@@ -498,110 +773,38 @@ function FeatureCard() {
                 </div>
               )}
               
-              {/* Table View Mode */}
-              {viewMode === 'table' ? (
-                <div className="overflow-x-auto">
-                  <table className="w-full border-collapse">
-                    <thead>
-                      <tr className="bg-primary/5">
-                        <th className="p-3 text-left">Component</th>
-                        <th className="p-3 text-left">Description</th>
-                        <th className="p-3 text-center">Category</th>
-                        <th className="p-3 text-center">Tags</th>
-                        <th className="p-3 text-center">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {filteredComponents
-                        .filter(comp => category.id === 'all' || comp.category === category.id)
-                        .map((component, index) => (
-                          <tr key={component.title} className={index % 2 === 0 ? 'bg-background' : 'bg-secondary/30'}>
-                            <td className="p-3">
-                              <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 rounded bg-primary/10 flex items-center justify-center text-primary">
-                                  {component.icon}
-                                </div>
-                                <div>
-                                  <div className="font-medium">{component.title}</div>
-                                  <div className="flex items-center gap-1.5 text-xs text-foreground/60">
-                                    {component.isNew && (
-                                      <span className="inline-flex items-center px-1.5 py-0.5 rounded-full bg-accent/20 text-accent-dark text-[10px]">
-                                        NEW
-                                      </span>
-                                    )}
-                                    {component.isUpdated && (
-                                      <span className="inline-flex items-center px-1.5 py-0.5 rounded-full bg-primary/20 text-primary text-[10px]">
-                                        UPDATED
-                                      </span>
-                                    )}
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td className="p-3 text-sm text-foreground/70">{component.description}</td>
-                            <td className="p-3 text-center">
-                              <span className="px-2 py-1 rounded-full bg-secondary text-xs">
-                                {component.category}
-                              </span>
-                            </td>
-                            <td className="p-3">
-                              <div className="flex flex-wrap justify-center gap-1">
-                                {component.tags.map(tag => (
-                                  <span key={tag} className="px-1.5 py-0.5 rounded-full bg-primary/10 text-[10px]">
-                                    {tag}
-                                  </span>
-                                ))}
-                              </div>
-                            </td>
-                            <td className="p-3 text-center">
-                              <div className="flex justify-center gap-2">
-                                <button 
-                                  className="p-1.5 hover:bg-secondary rounded-full"
-                                  onClick={() => toggleBookmark(component.title)}
-                                  title={bookmarkedComponents.includes(component.title) ? "Remove bookmark" : "Bookmark component"}
-                                >
-                                  {bookmarkedComponents.includes(component.title) ? (
-                                    <BookmarkSolidIcon className="w-4 h-4 text-primary" />
-                                  ) : (
-                                    <BookmarkIcon className="w-4 h-4" />
-                                  )}
-                                </button>
-                                <a 
-                                  href={component.link} 
-                                  className="p-1.5 hover:bg-secondary rounded-full"
-                                  title="View documentation"
-                                >
-                                  <ArrowTopRightOnSquareIcon className="w-4 h-4" />
-                                </a>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
-                </div>
-              ) : (
-                // Grid View Mode (Original)
-                <div className="docs-grid">
-                  {filteredComponents
-                    .filter(comp => category.id === 'all' || comp.category === category.id)
-                    .map((component) => (
-                      <DocsCard
-                        key={component.title}
-                        title={component.title}
-                        icon={component.icon}
-                        description={component.description}
-                        link={component.link}
-                        tags={component.tags}
-                        isNew={component.isNew}
-                        isUpdated={component.isUpdated}
-                        variant={component.variant as "primary" | "default" | "accent" | undefined}
-                        isBookmarked={bookmarkedComponents.includes(component.title)}
-                        onBookmarkToggle={() => toggleBookmark(component.title)}
-                      />
-                    ))}
-                </div>
-              )}
+              {/* Layout based on selected layout mode */}
+              <div className={`
+                ${layoutMode === 'grid' ? 'docs-grid' : ''}
+                ${layoutMode === 'showcase' ? 'flex flex-col gap-6' : ''}
+                ${layoutMode === 'compact' ? 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3' : ''}
+              `}>
+                {filteredComponents
+                  .filter(comp => category.id === 'all' || comp.category === category.id)
+                  .map((component) => (
+                    <DocsCard
+                      key={component.title}
+                      title={component.title}
+                      icon={component.icon}
+                      description={component.description}
+                      link={component.link}
+                      tags={component.tags}
+                      isNew={component.isNew}
+                      isUpdated={component.isUpdated}
+                      isPopular={component.isPopular}
+                      variant={getCardVariant(component)}
+                      size={getCardSize()}
+                      isBookmarked={bookmarkedComponents.includes(component.title)}
+                      onBookmarkToggle={() => toggleBookmark(component.title)}
+                      previewImage={component.previewImage}
+                      codePreview={component.codePreview}
+                      usageCount={component.usageCount}
+                      rating={component.rating}
+                      contributors={component.contributors}
+                      lastUpdated={component.lastUpdated}
+                    />
+                  ))}
+              </div>
               
               {filteredComponents.filter(comp => category.id === 'all' || comp.category === category.id).length === 0 && (
                 <div className="text-center py-12">
