@@ -31,16 +31,15 @@ import {
   ComputerDesktopIcon,
   SunIcon,
   MoonIcon,
-  ListBulletIcon,
   TableCellsIcon as TableIcon,
   VideoCameraIcon,
   BookOpenIcon,
   LinkIcon,
   StarIcon,
-  Squares2X2Icon
+  Squares2X2Icon,
+  ArrowTopRightOnSquareIcon
 } from '@heroicons/react/24/outline';
 import { 
-  CommandLineIcon,
   DocumentTextIcon,
   BookmarkIcon as BookmarkSolidIcon
 } from '@heroicons/react/24/solid';
@@ -99,6 +98,7 @@ export default function ComponentsPage() {
   };
   
   // Component data with categories
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const components = [
     // Core Components
     {
@@ -224,7 +224,7 @@ export default function ComponentsPage() {
       
       return matchesSearch && matchesCategory;
     });
-  }, [searchTerm, activeCategory]);
+  }, [components, searchTerm, activeCategory]);
   
   // Component categories for filtering
   const categories = [
@@ -585,7 +585,7 @@ function FeatureCard() {
                 <div className="docs-grid">
                   {filteredComponents
                     .filter(comp => category.id === 'all' || comp.category === category.id)
-                    .map((component, index) => (
+                    .map((component) => (
                       <DocsCard
                         key={component.title}
                         title={component.title}
@@ -595,7 +595,7 @@ function FeatureCard() {
                         tags={component.tags}
                         isNew={component.isNew}
                         isUpdated={component.isUpdated}
-                        variant={component.variant}
+                        variant={component.variant as "primary" | "default" | "accent" | undefined}
                         isBookmarked={bookmarkedComponents.includes(component.title)}
                         onBookmarkToggle={() => toggleBookmark(component.title)}
                       />

@@ -55,7 +55,7 @@ const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
     // Insert separators in the integer part
     const formattedIntPart = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, separator);
     
-    let formattedNumber = decimalPlaces > 0 ? `${formattedIntPart}.${decPart}` : formattedIntPart;
+    const formattedNumber = decimalPlaces > 0 ? `${formattedIntPart}.${decPart}` : formattedIntPart;
     
     // Apply highlighting to each digit if enabled
     if (withHighlight && highlightDigits) {

@@ -175,7 +175,14 @@ const Interactive3DIcon: React.FC<Interactive3DIconProps> = ({
       
       {/* Icon container */}
       <div className="icon-container relative z-10" style={{ transform: 'translateZ(10px)' }}>
-        {icon}
+        {
+          React.isValidElement(icon) 
+            ? React.cloneElement(icon, {
+                className: `w-full h-full transition-transform duration-200 ${isHovered ? 'scale-110' : ''}`,
+                style: { ...((icon.props as React.HTMLAttributes<HTMLElement>)?.style || {}), transform: isHovered ? `scale(${hoverScale})` : 'none' },
+              } as React.HTMLAttributes<HTMLElement>)
+            : icon
+        }
       </div>
       
       {/* Tooltip */}
