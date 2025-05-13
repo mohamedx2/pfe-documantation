@@ -7,6 +7,9 @@
 
 
 
+
+
+
 This repository contains the documentation website for Frontend Hamroun, a lightweight full-stack JavaScript framework with Virtual DOM and hooks implementation.
 
 ## About Frontend Hamroun
