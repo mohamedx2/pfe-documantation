@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-no-undef */
+ 
 'use client';
 import React, { useState, useEffect, useMemo } from 'react';
 import DocsCard from '@/components/DocsCard';
@@ -99,6 +99,7 @@ export default function ComponentsPage() {
   };
   
   // Component data with categories
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const components = [
     // Core Components
     {

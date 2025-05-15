@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { 
   CodeBracketIcon,
@@ -14,13 +13,11 @@ import {
   ArrowTopRightOnSquareIcon,
   CommandLineIcon,
   MagnifyingGlassIcon,
-  AdjustmentsHorizontalIcon,
   BookmarkIcon,
   ClockIcon
 } from '@heroicons/react/24/outline';
 import { BookmarkIcon as BookmarkSolidIcon } from '@heroicons/react/24/solid';
 import RevealOnScroll from '@/components/RevealOnScroll';
-import CodePlayground from '@/components/CodePlayground';
 import FloatingCard from '@/components/FloatingCard';
 
 export default function ExamplesPage() {
@@ -29,7 +26,6 @@ export default function ExamplesPage() {
   const [bookmarkedExamples, setBookmarkedExamples] = useState<string[]>([]);
   const [showOnlyBookmarked, setShowOnlyBookmarked] = useState(false);
   const [viewType, setViewType] = useState<'grid' | 'list'>('grid');
-  const [selectedExample, setSelectedExample] = useState<string | null>(null);
   
   // Example data
   const examples = [

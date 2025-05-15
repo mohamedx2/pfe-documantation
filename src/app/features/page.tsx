@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { 
   CodeBracketIcon, 
@@ -17,19 +16,16 @@ import {
   ArrowDownTrayIcon,
   ClockIcon,
   ChatBubbleLeftRightIcon,
-  LightBulbIcon,
   ComputerDesktopIcon,
   CursorArrowRaysIcon,
   BeakerIcon
 } from '@heroicons/react/24/outline';
 import { 
-  FireIcon,
   BoltIcon,
   SparklesIcon
 } from '@heroicons/react/24/solid';
 import RevealOnScroll from '@/components/RevealOnScroll';
 import FloatingCard from '@/components/FloatingCard';
-import CodePlayground from '@/components/CodePlayground';
 import GlowButton from '@/components/GlowButton';
 
 type Feature = {
@@ -45,7 +41,6 @@ type Feature = {
 export default function FeaturesPage() {
   const [activeFeature, setActiveFeature] = useState<string>('virtual-dom');
   const [activeTab, setActiveTab] = useState<'overview' | 'features' | 'comparison'>('overview');
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
   
   // Core features data
   const features: Feature[] = [
@@ -712,7 +707,7 @@ export function UserProfile({ userId, showDetails, onUserUpdate }: UserProfilePr
                             <h4 className="font-medium mb-2">RTL Support Demo</h4>
                             <div className="flex justify-center gap-8">
                               <div className="border border-primary/20 p-4 rounded-lg">
-                                <div className="text-left mb-2 font-mono text-xs">dir="ltr"</div>
+                                <div className="text-left mb-2 font-mono text-xs">dir=&quot;ltr&quot;</div>
                                 <div className="flex justify-between border-b pb-2 mb-2">
                                   <div>Logo</div>
                                   <div>Menu</div>
@@ -721,7 +716,7 @@ export function UserProfile({ userId, showDetails, onUserUpdate }: UserProfilePr
                               </div>
                               
                               <div className="border border-primary/20 p-4 rounded-lg">
-                                <div className="text-left mb-2 font-mono text-xs">dir="rtl"</div>
+                                <div className="text-left mb-2 font-mono text-xs">dir=&quot;rtl&quot;</div>
                                 <div className="flex justify-between border-b pb-2 mb-2">
                                   <div>Menu</div>
                                   <div>Logo</div>

@@ -238,6 +238,13 @@ const InteractiveDemo: React.FC<InteractiveDemoProps> = ({
   const [codeEdited, setCodeEdited] = useState<boolean>(false);
   const { theme } = useTheme();
 
+  // Map the theme value to ensure it's compatible with CodePlayground's theme prop
+  const playgroundTheme = theme === 'system' 
+    ? (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches 
+        ? 'dark' 
+        : 'light')
+    : theme as 'light' | 'dark';
+
   // Get the current code example based on active tab
   const currentCode = CODE_EXAMPLES[activeTab as keyof typeof CODE_EXAMPLES] || CODE_EXAMPLES.basic;
 
@@ -380,7 +387,7 @@ const InteractiveDemo: React.FC<InteractiveDemoProps> = ({
           
           <CodePlayground
             initialCode={currentCode}
-            theme={theme}
+            theme={playgroundTheme}
             readOnly={!showEditor}
           />
           

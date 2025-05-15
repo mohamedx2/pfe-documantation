@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { 
   GlobeAltIcon,
@@ -14,8 +13,7 @@ import {
   MapPinIcon,
   HashtagIcon,
   NewspaperIcon,
-  BellIcon,
-  ArrowTrendingUpIcon
+  BellIcon
 } from '@heroicons/react/24/outline';
 import RevealOnScroll from '@/components/RevealOnScroll';
 import FloatingCard from '@/components/FloatingCard';
@@ -283,7 +281,7 @@ export default function CommunityPage() {
                   Ahmed has contributed over 120 pull requests to the core library and 
                   helped build our Arabic localization support.
                 </p>
-                <a href="#" className="text-primary hover:underline">Read Ahmed's Story →</a>
+                <a href="#" className="text-primary hover:underline">Read Ahmed&apos;s Story →</a>
               </div>
             </RevealOnScroll>
             
@@ -326,8 +324,8 @@ export default function CommunityPage() {
             {subscribedToNewsletter ? (
               <div className="bg-white/20 backdrop-blur-md rounded-lg p-6 max-w-md mx-auto">
                 <BellIcon className="w-12 h-12 mx-auto mb-4" />
-                <h3 className="text-2xl font-bold mb-2">You're subscribed!</h3>
-                <p>Thank you for subscribing to our newsletter. You'll receive updates directly to your inbox!</p>
+                <h3 className="text-2xl font-bold mb-2">You&apos;re subscribed!</h3>
+                <p>Thank you for subscribing to our newsletter. You&apos;ll receive updates directly to your inbox!</p>
               </div>
             ) : (
               <form 
@@ -382,7 +380,7 @@ export default function CommunityPage() {
               <ul>
                 <li>Treat each other with respect and kindness</li>
                 <li>Listen actively and consider different perspectives</li>
-                <li>Support and encourage each other's growth and learning</li>
+                <li>Support and encourage each other&apos;s growth and learning</li>
                 <li>Welcome beginners and experienced developers alike</li>
                 <li>Celebrate cultural diversity and international representation</li>
               </ul>

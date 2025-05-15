@@ -1,8 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 'use client';
 
 import Image from "next/image";
-import { useState, useEffect, useRef, useReducer, useMemo } from "react";
+import { useState, useEffect, useRef, useReducer } from "react";
 import { 
   CodeBracketIcon, 
   ServerIcon, 
@@ -102,7 +102,7 @@ export default function Home() {
   const sectionsRef = useRef<{ [key: string]: HTMLElement | null }>({});
   
   // Use navigation context instead of local state
-  const { isInView, setIsInView } = useNavigation();
+  const { isInView, setActiveSection } = useNavigation();
   
   // Animation state with reducer
   const [animationState, dispatchAnimation] = useReducer(animationReducer, initialAnimationState);
@@ -228,13 +228,6 @@ export default async function Dashboard() {
   ];
 
   // Get currently active section
-  const activeSection = useMemo(() => {
-    const visibleSections = Object.entries(isInView)
-      .filter(([_, isVisible]) => isVisible)
-      .map(([id]) => id);
-    
-    return visibleSections.length > 0 ? visibleSections[0] : 'hero';
-  }, [isInView]);
 
   // Setup intersection observer to track which sections are in view
   useEffect(() => {
@@ -242,18 +235,20 @@ export default async function Dashboard() {
       (entries) => {
         entries.forEach((entry) => {
           const id = entry.target.id;
-          setIsInView((prev: any) => ({
-            ...prev,
-            [id]: entry.isIntersecting
-          }));
           
-          // Track first scroll
-          if (entry.isIntersecting && entry.target.id !== 'hero' && !hasScrolled) {
-            setHasScrolled(true);
-            dispatchAnimation({ 
-              type: 'INCREMENT_INTERACTION', 
-              payload: 'first-scroll' 
-            });
+          // Instead of trying to update isInView directly,
+          // use the navigation context to set the active section
+          if (entry.isIntersecting) {
+            setActiveSection(id);
+            
+            // Track first scroll
+            if (id !== 'hero' && !hasScrolled) {
+              setHasScrolled(true);
+              dispatchAnimation({ 
+                type: 'INCREMENT_INTERACTION', 
+                payload: 'first-scroll' 
+              });
+            }
           }
         });
       },
@@ -266,7 +261,7 @@ export default async function Dashboard() {
     });
     
     return () => observer.disconnect();
-  }, [hasScrolled]);
+  }, [hasScrolled, setActiveSection]);
   
   // Track mouse position for parallax and interactive effects
   useEffect(() => {
@@ -309,11 +304,7 @@ export default async function Dashboard() {
   };
   
   // Calculate mouse parallax
-  const mouseParallax = (strength: number = 20) => {
-    return {
-      transform: `translate(${(mousePosition.x - 0.5) * strength}px, ${(mousePosition.y - 0.5) * strength}px)`,
-    };
-  };
+
 
   return (
     <div className="min-h-screen">

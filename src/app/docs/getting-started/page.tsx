@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { 
   CommandLineIcon, 
@@ -15,8 +14,6 @@ import {
 } from '@heroicons/react/24/outline';
 import CodePlayground from '@/components/CodePlayground';
 import GlowButton from '@/components/GlowButton';
-import RevealOnScroll from '@/components/RevealOnScroll';
-import AnimatedTabs from '@/components/AnimatedTabs';
 
 export default function GettingStartedPage() {
   return (

@@ -11,7 +11,6 @@ import {
   RocketLaunchIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import Image from 'next/image';
 import RevealOnScroll from '@/components/RevealOnScroll';
 import FloatingCard from '@/components/FloatingCard';
 

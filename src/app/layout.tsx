@@ -14,7 +14,7 @@ import Image from "next/image";
 import Link from "next/link";
 import InteractiveBackground from "@/components/InteractiveBackground";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
-import { ThemeProvider } from "@/components/ThemeProvider";
+import { ThemeProvider } from "@/components/theme-provider";
 import InteractiveCursor from "@/components/InteractiveCursor";
 import MobileNavigation from "@/components/MobileNavigation";
 import AudioFeedback from "@/components/AudioFeedback";
@@ -365,57 +365,25 @@ export default function RootLayout({
                   document.addEventListener('DOMContentLoaded', () => {
                     // Enhanced section visibility tracking
                     const sections = document.querySelectorAll('section[id]');
-                    const navLinks = document.querySelectorAll('.nav-pill');
-                    const sectionDots = document.querySelectorAll('.section-dot');
                     
+                    // Create an intersection observer
                     const observer = new IntersectionObserver(
                       (entries) => {
                         entries.forEach((entry) => {
                           const id = entry.target.id;
                           
-                          // Update navigation pills
-                          navLinks.forEach(link => {
-                            const section = link.getAttribute('data-section');
-                            if (section === id) {
-                              if (entry.isIntersecting) {
-                                link.classList.add('active');
-                              } else {
-                                link.classList.remove('active');
-                              }
-                            }
+                          // Dispatch custom event for React components to handle
+                          const visibilityEvent = new CustomEvent('sectionInView', {
+                            detail: { id, visible: entry.isIntersecting }
                           });
                           
-                          // Update section dots
-                          sectionDots.forEach(dot => {
-                            const section = dot.getAttribute('data-section');
-                            if (section === id) {
-                              if (entry.isIntersecting) {
-                                dot.classList.add('active');
-                              } else {
-                                dot.classList.remove('active');
-                              }
-                            }
-                          });
-                          
-                          // Dispatch custom event for React components
-                          if (entry.isIntersecting) {
-                            document.dispatchEvent(
-                              new CustomEvent('sectionInView', { 
-                                detail: { id, visible: true } 
-                              })
-                            );
-                          } else {
-                            document.dispatchEvent(
-                              new CustomEvent('sectionInView', { 
-                                detail: { id, visible: false } 
-                              })
-                            );
-                          }
+                          document.dispatchEvent(visibilityEvent);
                         });
                       },
                       { threshold: 0.2 }
                     );
                     
+                    // Observe all sections
                     sections.forEach(section => {
                       observer.observe(section);
                     });
