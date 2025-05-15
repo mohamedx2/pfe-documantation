@@ -14,6 +14,7 @@ const ScrollToTopButton: React.FC<ScrollToTopButtonProps> = ({
 }) => {
   const [isVisible, setIsVisible] = useState(false);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const toggleVisibility = () => {
     if (window.pageYOffset > threshold) {
       setIsVisible(true);
@@ -35,7 +36,7 @@ const ScrollToTopButton: React.FC<ScrollToTopButtonProps> = ({
     return () => {
       window.removeEventListener('scroll', toggleVisibility);
     };
-  }, [threshold]);
+  }, [threshold, toggleVisibility]);
 
   return (
     <button

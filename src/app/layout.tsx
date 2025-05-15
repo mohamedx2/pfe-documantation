@@ -87,11 +87,11 @@ export default function RootLayout({
 
   return (
     <>
-      <html lang="en" className="scroll-smooth">
+      <html lang="en" className="scroll-smooth"  >
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <ThemeProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem theme="dark"   >
             <NavigationProvider>
               {/* Interactive background */}
               <InteractiveBackground 

@@ -391,7 +391,7 @@ export default async function Dashboard() {
                       height={120}
                       className="object-contain animate-float-3d relative z-10"
                     />
-                    <div className="absolute -right-4 top-0 bg-accent text-white text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1 shadow-lg animate-pulse">
+                    <div className="absolute -right-4 top-0 bg-accent text-white text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1 shadow-lg animate-pulse z-10">
                       <SparklesIcon className="w-3 h-3" /> v1.0
                     </div>
                     

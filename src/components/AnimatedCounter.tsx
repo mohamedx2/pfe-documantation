@@ -130,6 +130,7 @@ const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const startAnimation = () => {
     if (rafRef.current) {
       cancelAnimationFrame(rafRef.current);
@@ -172,11 +173,12 @@ const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
         cancelAnimationFrame(rafRef.current);
       }
       if (observerRef.current && elementRef.current) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         observerRef.current.unobserve(elementRef.current);
         observerRef.current.disconnect();
       }
     };
-  }, [animateOnView, end, duration, start]);
+  }, [animateOnView, end, duration, start, viewThreshold, startAnimation]);
 
   // Reset animation when end value changes
   useEffect(() => {
@@ -184,7 +186,7 @@ const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
     if (hasAnimatedRef.current) {
       startAnimation();
     }
-  }, [end]);
+  }, [end, startAnimation]);
 
   return (
     <div ref={elementRef} className={`animated-counter ${className}`}>

@@ -36,7 +36,6 @@ const TypewriterEffect: React.FC<TypewriterEffectProps> = ({
   const [displayText, setDisplayText] = useState('');
   const [cursorVisible, setCursorVisible] = useState(true);
   
-  const textArray = typeof text === 'string' ? [text] : text;
   const textIndex = useRef(0);
   const charIndex = useRef(0);
   const isDeleting = useRef(false);
@@ -65,10 +64,12 @@ const TypewriterEffect: React.FC<TypewriterEffectProps> = ({
   
   // Handle typewriter effect
   useEffect(() => {
+    const textArray = Array.isArray(text) ? text : [text];
     if (textArray.length === 0) return;
     
     let timeout: NodeJS.Timeout;
     
+    // Define type function inside useEffect to have access to all variables
     const type = () => {
       const currentText = textArray[textIndex.current];
       
@@ -125,11 +126,24 @@ const TypewriterEffect: React.FC<TypewriterEffectProps> = ({
     // Initial start with delay
     timeout = setTimeout(type, startDelay);
     
-    return () => clearTimeout(timeout);
-  }, [text, typingSpeed, deletingSpeed, delayAfterType, delayAfterDelete, infinite, startDelay, onComplete]);
+    // Cleanup function to clear timeout when component unmounts
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [
+    text, 
+    typingSpeed, 
+    deletingSpeed, 
+    delayAfterType, 
+    delayAfterDelete, 
+    infinite, 
+    startDelay, 
+    onComplete
+  ]);
   
+  // Use suppressHydrationWarning to prevent hydration issues with cursor blinking
   return (
-    <Component className={`typewriter-text ${className}`}>
+    <Component className={`typewriter-text ${className}`} suppressHydrationWarning>
       {displayText}
       {cursorElement}
     </Component>

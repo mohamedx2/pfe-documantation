@@ -19,6 +19,8 @@ const InteractiveBackground: React.FC<InteractiveBackgroundProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  // Add a mounted state to prevent SSR rendering of particles
+  const [mounted, setMounted] = useState(false);
   
   // Store mouse position
   const mousePosition = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -33,9 +35,18 @@ const InteractiveBackground: React.FC<InteractiveBackgroundProps> = ({
   const particles = useRef<any[]>([]);
   
   useEffect(() => {
+    // Set mounted to true when component mounts on client
+    setMounted(true);
+    
     // Check for dark mode
     const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     setIsDarkMode(darkModeMediaQuery.matches);
+    
+    // Also check for theme class on html element which might be set by ThemeProvider
+    const htmlElement = document.documentElement;
+    if (htmlElement.classList.contains('dark')) {
+      setIsDarkMode(true);
+    }
     
     // Listen for theme changes
     const handleColorSchemeChange = (e: MediaQueryListEvent) => {
@@ -66,13 +77,15 @@ const InteractiveBackground: React.FC<InteractiveBackgroundProps> = ({
     
     // Initialize particles
     const initParticles = () => {
+      // Use seedable random number generator or fixed values for testing
       const totalArea = window.innerWidth * window.innerHeight;
       const particleCount = Math.round((totalArea / 100000) * particleDensity);
       
       particles.current = [];
       
       for (let i = 0; i < particleCount; i++) {
-        particles.current.push({
+        // Using a more consistent approach for particle creation
+        const particle = {
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
           radius: Math.random() * 2 + 0.5,
@@ -82,10 +95,12 @@ const InteractiveBackground: React.FC<InteractiveBackgroundProps> = ({
           lastY: 0,
           hue: Math.random() * 30 - 15, // Color variation
           connection: [] // For storing connections
-        });
+        };
+        particles.current.push(particle);
       }
     };
     
+    // Only init particles after component is mounted on client
     initParticles();
     
     // Track mouse movement
@@ -219,7 +234,7 @@ const InteractiveBackground: React.FC<InteractiveBackgroundProps> = ({
       animationFrameId.current = requestAnimationFrame(animate);
     };
     
-    // Start animation
+    // Start animation only after mounting on client
     animate();
     
     // Cleanup
@@ -234,6 +249,33 @@ const InteractiveBackground: React.FC<InteractiveBackgroundProps> = ({
       }
     };
   }, [opacity, particleDensity, mouseForce, particleColor]);
+
+  // Observer theme changes from the DOM
+  useEffect(() => {
+    if (!mounted) return;
+    
+    // Create mutation observer to detect theme changes in the DOM
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class' || mutation.attributeName === 'data-theme') {
+          const htmlElement = document.documentElement;
+          const isDark = htmlElement.classList.contains('dark') || 
+                         htmlElement.getAttribute('data-theme') === 'dark';
+          setIsDarkMode(isDark);
+        }
+      });
+    });
+    
+    // Start observing html element for attribute changes
+    observer.observe(document.documentElement, { attributes: true });
+    
+    return () => observer.disconnect();
+  }, [mounted]);
+  
+  // Don't render anything on server, only on client
+  if (!mounted) {
+    return null;
+  }
   
   return (
     <canvas

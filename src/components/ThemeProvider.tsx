@@ -29,48 +29,55 @@ export function ThemeProvider({
   storageKey = "theme",
   ...props
 }: ThemeProviderProps) {
-  // Use useState with a function to avoid localStorage access during SSR
+  // Use a mounting state to prevent hydration mismatch
+  const [mounted, setMounted] = useState(false);
   const [theme, setTheme] = useState<Theme>(defaultTheme);
 
-  // Only access localStorage after component has mounted (client-side only)
+  // Only access localStorage after component has mounted
   useEffect(() => {
+    setMounted(true);
     const savedTheme = localStorage.getItem(storageKey) as Theme | null;
     if (savedTheme) {
       setTheme(savedTheme);
     }
   }, [storageKey]);
 
+  // Apply theme to document element only after mounting
   useEffect(() => {
+    if (!mounted) return;
+    
     const root = window.document.documentElement;
-
-    // Remove both classes first to ensure clean state
     root.classList.remove("light", "dark");
-
-    // Apply theme class to root element
+    
+    let resolvedTheme: "light" | "dark" = "light";
+    
     if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-        .matches
-        ? "dark"
+      resolvedTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark" 
         : "light";
-
-      root.classList.add(systemTheme);
-      root.setAttribute("data-theme", systemTheme);
-      root.style.colorScheme = systemTheme;
     } else {
-      root.classList.add(theme);
-      root.setAttribute("data-theme", theme);
-      root.style.colorScheme = theme;
+      resolvedTheme = theme as "light" | "dark";
     }
-  }, [theme]);
+    
+    // Apply theme consistently
+    root.classList.add(resolvedTheme);
+    // Use dataset instead of setAttribute for better React compatibility
+    root.dataset.theme = resolvedTheme;
+    root.style.colorScheme = resolvedTheme;
+    
+  }, [theme, mounted]);
 
   const value = {
     theme,
-    setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme);
-      setTheme(theme);
-    },
+    setTheme: React.useCallback((theme: Theme) => {
+      if (mounted) {
+        localStorage.setItem(storageKey, theme);
+        setTheme(theme);
+      }
+    }, [mounted, storageKey]),
   };
 
+  // Return a simplified provider during server render to avoid hydration issues
   return (
     <ThemeProviderContext.Provider {...props} value={value}>
       {children}
