@@ -1873,3 +1873,82 @@ pre code {
 .docs-card:hover .animated-icon {
   transform: translateY(-3px);
 }
+
+/* Section Dots Navigation */
+.section-dot.active {
+  position: relative;
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--primary);
+}
+
+.section-dot::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: var(--primary);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s;
+  z-index: -1;
+}
+
+.section-dot:hover::before {
+  width: 200%;
+  height: 200%;
+}
+
+/* Progress Indicator */
+.progress-label {
+  position: absolute;
+  top: 100%;
+  background: var(--primary);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 0 0 4px 4px;
+  font-size: 10px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+/* Active Section Styles */
+.nav-pill.active {
+  background-color: var(--primary);
+  color: white;
+}
+
+/* Enhanced Section Transitions */
+section {
+  position: relative;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  will-change: opacity, transform;
+}
+
+section[data-visible="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+section[data-visible="false"] {
+  opacity: 0.8;
+  transform: translateY(20px);
+}
+
+/* Scroll to Top Button Animation */
+@keyframes pulse-up {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.scroll-to-top {
+  animation: pulse-up 2s infinite;
+}
+
+.scroll-to-top:hover {
+  animation-play-state: paused;
+}

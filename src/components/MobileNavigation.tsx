@@ -1,158 +1,98 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import Link from 'next/link';
+import { useNavigation } from './NavigationContext';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
 
-interface MobileNavigationProps {
-  items: {
-    label: string;
-    href: string;
-    icon: React.ReactNode;
-  }[];
-  checkboxId?: string;
+interface NavItem {
+  label: string;
+  href: string;
+  icon: React.ReactNode;
 }
 
-const MobileNavigation: React.FC<MobileNavigationProps> = ({ 
-  items,
-  checkboxId = 'mobile-menu-toggle'
-}) => {
-  const [isOpen, setIsOpen] = useState(false);
-  
-  // Monitor the checkbox state
-  useEffect(() => {
-    const checkbox = document.getElementById(checkboxId) as HTMLInputElement;
-    if (!checkbox) return;
-    
-    const updateMenuState = () => {
-      setIsOpen(checkbox.checked);
-      document.body.style.overflow = checkbox.checked ? 'hidden' : '';
-    };
-    
-    // Initial state check
-    updateMenuState();
-    
-    // Listen for changes
-    checkbox.addEventListener('change', updateMenuState);
-    
-    return () => {
-      checkbox.removeEventListener('change', updateMenuState);
-      document.body.style.overflow = '';
-    };
-  }, [checkboxId]);
-  
-  // Close menu on ESC key
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        const checkbox = document.getElementById(checkboxId) as HTMLInputElement;
-        if (checkbox && checkbox.checked) {
-          checkbox.checked = false;
-          setIsOpen(false);
-          document.body.style.overflow = '';
-        }
-      }
-    };
-    
-    window.addEventListener('keydown', handleEscape);
-    return () => window.removeEventListener('keydown', handleEscape);
-  }, [checkboxId]);
-  
-  // Handle menu close (updates checkbox)
-  const handleClose = () => {
-    const checkbox = document.getElementById(checkboxId) as HTMLInputElement;
-    if (checkbox) {
-      checkbox.checked = false;
-      setIsOpen(false);
-      document.body.style.overflow = '';
-    }
-  };
+interface MobileNavigationProps {
+  items: NavItem[];
+}
+
+const MobileNavigation: React.FC<MobileNavigationProps> = ({ items }) => {
+  const { activeSection } = useNavigation();
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.5 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
-            onClick={handleClose}
-          />
-
-          {/* Menu panel */}
-          <motion.div
-            initial={{ x: '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '100%' }}
-            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed inset-y-0 right-0 z-50 w-full max-w-xs glass-morphism shadow-xl"
+    <div 
+      id="mobile-menu"
+      className="fixed inset-y-0 right-0 z-50 w-64 bg-background shadow-xl transform translate-x-full transition-transform duration-300"
+    >
+      <div className="flex flex-col h-full">
+        <div className="p-4 border-b border-primary/10 flex justify-between items-center">
+          <h3 className="font-semibold text-lg">Menu</h3>
+          <label 
+            htmlFor="mobile-menu-toggle"
+            className="p-2 rounded-md hover:bg-secondary/80 transition-colors cursor-pointer"
+            id="mobile-menu-close"
           >
-            <div className="p-6 h-full flex flex-col">
-              <div className="flex justify-between items-center mb-8">
-                <div className="flex items-center gap-2">
-                  <Image 
-                    src="/images/logo.png"
-                    alt="Frontend Hamroun Logo"
-                    width={30}
-                    height={30}
-                    className="object-contain"
-                  />
-                  <span className="font-semibold text-base logo-text-gradient">Frontend Hamroun</span>
-                </div>
-                <button 
-                  className="p-2 rounded-full hover:bg-secondary/80 transition-colors btn-ripple"
-                  aria-label="Close menu"
-                  onClick={handleClose}
-                >
-                  <XMarkIcon className="w-5 h-5" />
-                </button>
-              </div>
+            <XMarkIcon className="w-5 h-5" />
+          </label>
+        </div>
+        
+        <div className="flex-1 overflow-y-auto py-4">
+          <ul className="space-y-2 px-3">
+            {items.map((item, index) => {
+              // Determine if the link is external
+              const isExternal = item.href.startsWith('http');
               
-              <nav className="flex-1 overflow-y-auto">
-                <ul className="space-y-1">
-                  {items.map((item, index) => (
-                    <motion.li 
-                      key={item.href}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.1 + index * 0.05 }}
+              // Extract the section ID from the href
+              const sectionId = item.href.startsWith('#') ? 
+                item.href.substring(1) : 
+                item.href.split('#')[1] || '';
+                
+              // Check if this section is active
+              const isActive = activeSection === sectionId;
+              
+              return (
+                <li key={index}>
+                  {isExternal ? (
+                    <a
+                      href={item.href}
+                      className={`flex items-center gap-3 px-4 py-2 rounded-lg transition-colors ${
+                        isActive ? 'bg-primary text-white' : 'hover:bg-secondary/60'
+                      }`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => document.getElementById('mobile-menu-toggle')?.click()}
                     >
-                      <a 
-                        href={item.href}
-                        className="flex items-center py-3 px-4 rounded-lg hover:bg-primary/5 transition-colors"
-                        onClick={handleClose}
-                      >
-                        <span className="w-5 h-5 mr-3 text-primary">{item.icon}</span>
-                        <span>{item.label}</span>
-                      </a>
-                    </motion.li>
-                  ))}
-                </ul>
-              </nav>
-              
-              <motion.div 
-                className="mt-auto pt-4 border-t border-primary/10"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-              >
-                <a 
-                  href="#getting-started"
-                  className="block text-center w-full py-3 btn-interactive rounded-lg"
-                  onClick={handleClose}
-                >
-                  Get Started
-                </a>
-              </motion.div>
-            </div>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+                      <span className="text-primary">{item.icon}</span>
+                      {item.label}
+                    </a>
+                  ) : (
+                    <Link 
+                      href={item.href}
+                      className={`flex items-center gap-3 px-4 py-2 rounded-lg transition-colors ${
+                        isActive ? 'bg-primary text-white' : 'hover:bg-secondary/60'
+                      }`}
+                      onClick={() => document.getElementById('mobile-menu-toggle')?.click()}
+                    >
+                      <span className={isActive ? 'text-white' : 'text-primary'}>{item.icon}</span>
+                      {item.label}
+                    </Link>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+        
+        <div className="p-4 border-t border-primary/10 text-center">
+          <Link 
+            href="/docs/getting-started"
+            className="btn-primary w-full py-2 px-4 rounded-full text-sm"
+            onClick={() => document.getElementById('mobile-menu-toggle')?.click()}
+          >
+            Get Started
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 };
 
