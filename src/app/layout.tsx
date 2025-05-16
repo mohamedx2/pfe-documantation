@@ -12,17 +12,16 @@ import {
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
-import InteractiveBackground from "@/components/InteractiveBackground";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { ThemeProvider } from "@/components/theme-provider";
-import InteractiveCursor from "@/components/InteractiveCursor";
 import MobileNavigation from "@/components/MobileNavigation";
-import AudioFeedback from "@/components/AudioFeedback";
 import AnimatedGradientText from "@/components/AnimatedGradientText";
 import ScrollProgressIndicator from "@/components/ScrollProgressIndicator";
-import ScrollToTopButton from "@/components/ScrollToTopButton";
 import SectionNavigation from "@/components/SectionNavigation";
 import { NavigationProvider } from "@/components/NavigationContext";
+import ClientOnly from "@/components/ClientOnly";
+import ClientComponents from "@/components/ClientComponents";
+import CurrentTime from "@/components/CurrentTime";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -35,6 +34,9 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// Fixed time for server rendering
+const STATIC_TIME = "12:00 PM";
+
 export const metadata: Metadata = {
   title: "Frontend Hamroun - Lightweight JavaScript Framework",
   description: "A lightweight full-stack JavaScript framework with Virtual DOM and hooks implementation - One Culture, One Framework",
@@ -45,12 +47,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const currentTime = new Date().toLocaleTimeString('en-US', { 
-    hour: '2-digit', 
-    minute: '2-digit',
-    hour12: true 
-  });
-
   // Navigation items for mobile menu
   const navItems = [
     { 
@@ -87,24 +83,20 @@ export default function RootLayout({
 
   return (
     <>
-      <html lang="en" className="scroll-smooth"  >
+      <html lang="en" className="scroll-smooth">
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem theme="dark"   >
+          <ThemeProvider defaultTheme="system"  >
             <NavigationProvider>
-              {/* Interactive background */}
-              <InteractiveBackground 
-                opacity={0.8}
-                particleDensity={12}
-                mouseForce={120}
-              />
-              
-              {/* Custom cursor for desktop */}
-              <InteractiveCursor />
-              
-              {/* Audio feedback for interactions */}
-              <AudioFeedback />
+              {/* Client Components with random values */}
+              <ClientOnly>
+                <ClientComponents 
+                  backgroundOpacity={0.8}
+                  particleDensity={12}
+                  mouseForce={120}
+                />
+              </ClientOnly>
               
               {/* Enhanced scroll progress indicator */}
               <ScrollProgressIndicator showLabels={true} />
@@ -120,16 +112,18 @@ export default function RootLayout({
                 className="fixed right-6 top-1/2 -translate-y-1/2 z-30 hidden lg:flex flex-col gap-3"
               />
               
-              {/* Scroll to top button */}
-              <ScrollToTopButton />
-              
               {/* Top banner for language selection and special features */}
               <div className="glass-morphism bg-primary/5 backdrop-blur-lg py-2 px-4 text-xs border-b border-primary/10 relative z-10">
                 <div className="container mx-auto flex justify-between items-center">
                   <div className="flex items-center gap-4">
                     <div className="prayer-time animate-pulse-border">
-                      <span className="prayer-dot"></span>
-                      <span>{currentTime}</span>
+                      <span className="prayer-dot"></span>                      <span>
+                        <ClientOnly 
+                          fallback={STATIC_TIME}
+                        >
+                          <CurrentTime />
+                        </ClientOnly>
+                      </span>
                     </div>
                     <div className="hidden md:flex items-center">
                       <span className="text-foreground/70 mr-2">Frontend Hamroun v1.0</span>

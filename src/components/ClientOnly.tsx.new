@@ -1,0 +1,57 @@
+'use client';
+
+import { useEffect, useState, ReactNode } from 'react';
+
+type RenderFunction = () => ReactNode;
+
+interface ClientOnlyProps {
+  children?: ReactNode;
+  fallback?: ReactNode;
+  renderContent?: RenderFunction | string;
+}
+
+/**
+ * Component that only renders its children on the client side
+ * This prevents hydration mismatches for components that use browser-only APIs
+ * or random values that would differ between server and client
+ */
+export default function ClientOnly({ 
+  children, 
+  fallback = null,
+  renderContent
+}: ClientOnlyProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // During server rendering or before mounting, only render fallback
+  if (!mounted) {
+    return <>{fallback}</>;
+  }
+
+  // On client after mounting, render either the renderContent function result or children
+  // Ensure renderContent is properly called and not treated as a child itself
+  if (renderContent) {
+    if (typeof renderContent === 'function') {
+      return <>{renderContent()}</>;
+    }
+    return <>{renderContent}</>;
+  }
+  
+  // Handle case where children might be a function
+  if (children && typeof children === 'function') {
+    try {
+      // Type assertion to tell TypeScript this is a function
+      const childrenFunc = children as RenderFunction;
+      return <>{childrenFunc()}</>;
+    } catch (e) {
+      console.error('Error calling children as function:', e);
+      return <>{children}</>;
+    }
+  }
+  
+  // Default case - render children normally
+  return <>{children}</>;
+}

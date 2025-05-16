@@ -248,7 +248,7 @@ const InteractiveBackground: React.FC<InteractiveBackgroundProps> = ({
         clearTimeout(mouseMovementTimeout.current);
       }
     };
-  }, [opacity, particleDensity, mouseForce, particleColor]);
+  }, [opacity, particleDensity, mouseForce, particleColor, isDarkMode]);
 
   // Observer theme changes from the DOM
   useEffect(() => {

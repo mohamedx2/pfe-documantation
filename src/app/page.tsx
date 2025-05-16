@@ -788,9 +788,9 @@ export default async function Dashboard() {
       <section 
         id="getting-started" 
         className={`py-20 bg-gradient-to-b from-background/50 to-secondary/30 arabic-pattern-2 relative transition-all duration-700 ${
-          isInView.gettingStarted ? 'opacity-100 transform-none' : 'opacity-80 translate-y-10'
+          isInView['getting-started'] ? 'opacity-100 transform-none' : 'opacity-80 translate-y-10'
         }`}
-        ref={el => { sectionsRef.current.gettingStarted = el; }}
+        ref={el => { sectionsRef.current['getting-started'] = el; }}
       >
         <RevealOnScroll threshold={0.1}>
           <div className={`container mx-auto px-4 transition-all duration-1000 ${
