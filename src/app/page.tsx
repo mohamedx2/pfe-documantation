@@ -36,6 +36,7 @@ import AnimatedCounter from "@/components/AnimatedCounter";
 import CodePlayground from "@/components/CodePlayground";
 import GlowButton from "@/components/GlowButton";
 import { useNavigation } from "@/components/NavigationContext";
+import ClientOnly from "@/components/ClientOnly";
 
 // Animation state reducer
 type AnimationState = {
@@ -396,22 +397,24 @@ export default async function Dashboard() {
                     </div>
                     
                     {/* Interactive particle effect */}
-                    {!animationState.animationPaused && (
-                      <div className="absolute -inset-10 pointer-events-none">
-                        {Array.from({ length: animationState.particleIntensity === 'low' ? 5 : (animationState.particleIntensity === 'medium' ? 10 : 20) }).map((_, i) => (
-                          <div 
-                            key={i}
-                            className="absolute w-2 h-2 rounded-full bg-primary/30"
-                            style={{
-                              left: `${Math.random() * 100}%`,
-                              top: `${Math.random() * 100}%`,
-                              animation: `float ${3 + Math.random() * 4}s linear ${Math.random() * 2}s infinite`,
-                              opacity: Math.random() * 0.5 + 0.2
-                            }}
-                          ></div>
-                        ))}
-                      </div>
-                    )}
+                    <ClientOnly>
+                      {!animationState.animationPaused && (
+                        <div className="absolute -inset-10 pointer-events-none">
+                          {Array.from({ length: animationState.particleIntensity === 'low' ? 5 : (animationState.particleIntensity === 'medium' ? 10 : 20) }).map((_, i) => (
+                            <div 
+                              key={i}
+                              className="absolute w-2 h-2 rounded-full bg-primary/30"
+                              style={{
+                                left: `${Math.random() * 100}%`,
+                                top: `${Math.random() * 100}%`,
+                                animation: `float ${3 + Math.random() * 4}s linear ${Math.random() * 2}s infinite`,
+                                opacity: Math.random() * 0.5 + 0.2
+                              }}
+                            ></div>
+                          ))}
+                        </div>
+                      )}
+                    </ClientOnly>
                   </div>
                 </div>
 
@@ -712,18 +715,20 @@ export default async function Dashboard() {
                       minimizing browser reflows and repaints.
                     </p>
                     <div className="flex flex-col items-center gap-4">
-                      <div className="grid grid-cols-3 gap-2">
-                        {Array.from({ length: 9 }).map((_, i) => (
-                          <div 
-                            key={i} 
-                            className={`w-16 h-16 rounded flex items-center justify-center transition-all ${
-                              Math.random() > 0.7 ? 'bg-primary/20 shadow-sm animate-pulse' : 'bg-secondary'
-                            }`}
-                          >
-                            {i + 1}
-                          </div>
-                        ))}
-                      </div>
+                      <ClientOnly>
+                        <div className="grid grid-cols-3 gap-2">
+                          {Array.from({ length: 9 }).map((_, i) => (
+                            <div 
+                              key={i} 
+                              className={`w-16 h-16 rounded flex items-center justify-center transition-all ${
+                                Math.random() > 0.7 ? 'bg-primary/20 shadow-sm animate-pulse' : 'bg-secondary'
+                              }`}
+                            >
+                              {i + 1}
+                            </div>
+                          ))}
+                        </div>
+                      </ClientOnly>
                       <div className="text-xs text-foreground/60 italic mt-2">
                         Only highlighted nodes are being updated
                       </div>
@@ -794,7 +799,7 @@ export default async function Dashboard() {
       >
         <RevealOnScroll threshold={0.1}>
           <div className={`container mx-auto px-4 transition-all duration-1000 ${
-            isInView.gettingStarted ? 'opacity-100 transform-none' : 'opacity-0 translate-y-10'
+            isInView['getting-started'] ? 'opacity-100 transform-none' : 'opacity-0 translate-y-10'
           }`}>
             <div className="flex flex-col md:flex-row gap-8 items-center mb-12">
               <div className="flex-1">

@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { SunIcon, MoonIcon } from '@heroicons/react/24/outline';
-import { useTheme } from './ThemeProvider';
+import { SunIcon, MoonIcon, ComputerDesktopIcon } from '@heroicons/react/24/outline';
+import { useTheme } from './theme-provider';
 
 /**
  * Theme switcher component that allows users to toggle between light and dark themes.
@@ -38,10 +38,15 @@ const ThemeSwitcher: React.FC<{
     md: 'p-2',
     lg: 'p-2.5',
   };
-
-  // Toggle between light and dark themes
+  // Toggle through light → dark → system themes
   const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
+    if (theme === 'light') {
+      setTheme('dark');
+    } else if (theme === 'dark') {
+      setTheme('system');
+    } else {
+      setTheme('light');
+    }
   };
 
   if (asToggle) {
@@ -68,7 +73,6 @@ const ThemeSwitcher: React.FC<{
       </div>
     );
   }
-
   // Default button style
   return (
     <button
@@ -81,10 +85,15 @@ const ThemeSwitcher: React.FC<{
           <SunIcon className={iconSizeMap[size]} />
           {showLabels && <span className="ml-2">Light Mode</span>}
         </div>
-      ) : (
+      ) : theme === 'light' ? (
         <div className="flex items-center">
           <MoonIcon className={iconSizeMap[size]} />
           {showLabels && <span className="ml-2">Dark Mode</span>}
+        </div>
+      ) : (
+        <div className="flex items-center">
+          <ComputerDesktopIcon className={iconSizeMap[size]} />
+          {showLabels && <span className="ml-2">System</span>}
         </div>
       )}
     </button>

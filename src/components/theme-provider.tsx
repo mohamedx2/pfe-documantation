@@ -45,7 +45,6 @@ export function ThemeProvider({
       setTheme(savedTheme);
     }
   }, [storageKey]);
-
   // Apply theme to document only after mounting
   useEffect(() => {
     if (!mounted) return;
@@ -55,16 +54,40 @@ export function ThemeProvider({
     // Remove both classes first
     root.classList.remove("light", "dark");
     
+    let effectiveTheme: "light" | "dark";
+    
     // Apply theme class based on current theme
     if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+      effectiveTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
         ? "dark"
         : "light";
-
-      root.classList.add(systemTheme);
     } else {
-      root.classList.add(theme);
+      effectiveTheme = theme as "light" | "dark";
     }
+    
+    root.classList.add(effectiveTheme);
+    
+    // Also set data attributes for better styling
+    root.setAttribute("data-theme", effectiveTheme);
+    root.style.colorScheme = effectiveTheme;
+    
+    // Listen for system theme changes
+    const handleSystemThemeChange = (e: MediaQueryListEvent) => {
+      if (theme === "system") {
+        root.classList.remove("light", "dark");
+        const newTheme = e.matches ? "dark" : "light";
+        root.classList.add(newTheme);
+        root.setAttribute("data-theme", newTheme);
+        root.style.colorScheme = newTheme;
+      }
+    };
+    
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    mediaQuery.addEventListener("change", handleSystemThemeChange);
+    
+    return () => {
+      mediaQuery.removeEventListener("change", handleSystemThemeChange);
+    };
   }, [theme, mounted]);
 
   // Create a safe version of setTheme

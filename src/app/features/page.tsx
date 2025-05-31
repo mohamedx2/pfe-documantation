@@ -27,6 +27,7 @@ import {
 import RevealOnScroll from '@/components/RevealOnScroll';
 import FloatingCard from '@/components/FloatingCard';
 import GlowButton from '@/components/GlowButton';
+import ClientOnly from '@/components/ClientOnly';
 
 type Feature = {
   id: string;
@@ -667,22 +668,23 @@ export function UserProfile({ userId, showDetails, onUserUpdate }: UserProfilePr
                       <div className="text-foreground/50">
                         {activeFeature === 'virtual-dom' && (
                           <div className="text-center">
-                            <h4 className="font-medium mb-2">Virtual DOM Demo</h4>
-                            <p className="max-w-md mx-auto text-sm mb-4">
+                            <h4 className="font-medium mb-2">Virtual DOM Demo</h4>                            <p className="max-w-md mx-auto text-sm mb-4">
                               Interactive visualization showing how Virtual DOM efficiently updates only changed elements
                             </p>
-                            <div className="grid grid-cols-3 gap-2 max-w-xs mx-auto">
-                              {Array.from({ length: 9 }).map((_, i) => (
-                                <div 
-                                  key={i} 
-                                  className={`w-16 h-16 rounded flex items-center justify-center transition-all ${
-                                    Math.random() > 0.7 ? 'bg-primary/20 shadow-sm animate-pulse' : 'bg-background/70'
-                                  }`}
-                                >
-                                  {i + 1}
-                                </div>
-                              ))}
-                            </div>
+                            <ClientOnly>
+                              <div className="grid grid-cols-3 gap-2 max-w-xs mx-auto">
+                                {Array.from({ length: 9 }).map((_, i) => (
+                                  <div 
+                                    key={i} 
+                                    className={`w-16 h-16 rounded flex items-center justify-center transition-all ${
+                                      Math.random() > 0.7 ? 'bg-primary/20 shadow-sm animate-pulse' : 'bg-background/70'
+                                    }`}
+                                  >
+                                    {i + 1}
+                                  </div>
+                                ))}
+                              </div>
+                            </ClientOnly>
                           </div>
                         )}
                         

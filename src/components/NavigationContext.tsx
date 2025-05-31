@@ -18,12 +18,13 @@ type NavigationContextType = {
 
 const defaultSections: Section[] = [
   { id: 'hero', label: 'Home', url: '/' },
+  { id: 'demos', label: 'Demos', url: '/#demos' },
+  { id: 'getting-started', label: 'Get Started', url: '/#getting-started' },
   { id: 'features', label: 'Features', url: '/#features' },
+  { id: 'community', label: 'Community', url: '/#community' },
+  { id: 'cta', label: 'Get Started', url: '/#cta' },
   { id: 'docs', label: 'Documentation', url: '/docs' },
   { id: 'examples', label: 'Examples', url: '/examples' },
-  { id: 'getting-started', label: 'Get Started', url: '/#getting-started' },
-  { id: 'demos', label: 'Demos', url: '/#demos' },
-  { id: 'community', label: 'Community', url: '/#community' },
   { id: 'arabic-dev', label: 'Arabic Community', url: '/arabic' }
 ];
 
@@ -39,7 +40,9 @@ export const useNavigation = () => useContext(NavigationContext);
 
 export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [activeSection, setActiveSection] = useState('hero');
-  const [isInView, setIsInView] = useState<Record<string, boolean>>({});
+  const [isInView, setIsInView] = useState<Record<string, boolean>>({
+    hero: true, // Initialize hero as visible
+  });
   
   // Smooth scroll to section
   const scrollToSection = (id: string) => {
@@ -51,20 +54,20 @@ export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       window.scrollTo({ top: 0, behavior: 'smooth' });
       setActiveSection('hero');
     }
-  };
-  
-  // Track section visibility
+  };  // Track section visibility
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           const id = entry.target.id;
+          const isIntersecting = entry.isIntersecting;
+          
           setIsInView(prev => ({
             ...prev,
-            [id]: entry.isIntersecting
+            [id]: isIntersecting
           }));
           
-          if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+          if (isIntersecting && entry.intersectionRatio > 0.3) {
             setActiveSection(id);
             
             // Update URL hash without scrolling
@@ -79,16 +82,51 @@ export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
           }
         });
       },
-      { threshold: [0.2, 0.5] }
+      { 
+        threshold: [0, 0.1, 0.3, 0.5], // Multiple thresholds for better detection
+        rootMargin: '-10% 0px -10% 0px' // Trigger when element is 10% into viewport
+      }
     );
     
-    // Observe all sections
-    document.querySelectorAll('section[id]').forEach(section => {
-      observer.observe(section);
-    });
+    // Function to observe sections with retry logic
+    const observeSections = () => {
+      const sections = document.querySelectorAll('section[id]');
+      console.log('Found sections:', sections.length);
+      
+      if (sections.length === 0) {
+        // Retry after a short delay if no sections found
+        setTimeout(observeSections, 500);
+        return;
+      }
+      
+      sections.forEach(section => {
+        console.log('Observing section:', section.id);
+        observer.observe(section);
+      });
+      
+      // Initial visibility check for all sections
+      setTimeout(() => {
+        sections.forEach(section => {
+          const rect = section.getBoundingClientRect();
+          const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+          setIsInView(prev => ({
+            ...prev,
+            [section.id]: isVisible
+          }));
+        });
+      }, 100);
+    };
+    
+    // Start observing
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', observeSections);
+    } else {
+      observeSections();
+    }
     
     return () => {
       observer.disconnect();
+      document.removeEventListener('DOMContentLoaded', observeSections);
     };
   }, []);
   
