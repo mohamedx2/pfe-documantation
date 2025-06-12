@@ -38,7 +38,7 @@ const geistMono = Geist_Mono({
 const STATIC_TIME = "12:00 PM";
 
 export const metadata: Metadata = {
-  title: "Frontend Hamroun - Lightweight JavaScript Framework",
+  title: "baraqex - Lightweight JavaScript Framework",
   description: "A lightweight full-stack JavaScript framework with Virtual DOM and hooks implementation - One Culture, One Framework",
 };
 
