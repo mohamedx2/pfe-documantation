@@ -54,7 +54,7 @@ type AnimationAction =
   | { type: 'SET_TAB'; payload: number }
   | { type: 'TOGGLE_ANIMATION_PAUSE' }
   | { type: 'TOGGLE_CODE_PLAYGROUND' }
-  | { type: 'SET_DEMO' }
+  | { type: 'SET_DEMO'; payload: number }
   | { type: 'SET_PARTICLE_INTENSITY'; payload: 'low' | 'medium' | 'high' }
   | { type: 'INCREMENT_INTERACTION'; payload: string };
 
