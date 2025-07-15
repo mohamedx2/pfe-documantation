@@ -26,34 +26,40 @@ export default function DocsPage() {
   // FAQ items for the documentation
   const faqItems = [
     {
-      question: "How does Frontend Hamroun compare to React?",
+      question: "How does Baraqex compare to React and other frameworks?",
       answer: (
         <div className="space-y-2">
-          <p>Frontend Hamroun is inspired by React but optimized for specific use cases:</p>
+          <p>Baraqex is built on Frontend Hamroun but provides a complete full-stack solution:</p>
           <ul className="list-disc pl-5 space-y-1">
-            <li>Smaller bundle size (&lt;5KB vs React&apos;s ~40KB)</li>
-            <li>Integrated server and client capabilities</li>
-            <li>Simplified API with similar paradigms (components, hooks, virtual DOM)</li>
-            <li>Built-in support for Arabic (RTL) and i18n</li>
+            <li>Complete full-stack framework vs frontend-only libraries</li>
+            <li>Built-in server-side rendering and API routing</li>
+            <li>Integrated database support and authentication</li>
+            <li>WebAssembly integration for high-performance computing</li>
+            <li>Simplified API with React-like paradigms</li>
+            <li>Built-in support for TypeScript and modern tooling</li>
           </ul>
         </div>
       )
     },
     {
-      question: "Can I use npm packages with Frontend Hamroun?",
-      answer: "Yes, Frontend Hamroun is compatible with most npm packages. You can use any utility libraries, UI components, and tools that don't rely on framework-specific features. For React components, we provide an adapter module (@frontend-hamroun/react-adapter) to integrate them."
+      question: "Can I use npm packages with Baraqex?",
+      answer: "Yes, Baraqex is fully compatible with the npm ecosystem. You can use any utility libraries, UI components, and tools. The framework provides browser and server builds, so package compatibility is automatic based on your environment."
     },
     {
-      question: "Is Frontend Hamroun production-ready?",
-      answer: "Frontend Hamroun is currently in beta (v1.0.0-beta). While it's being used in several production applications, we recommend thorough testing before deploying mission-critical applications. We're actively addressing issues and improving performance."
+      question: "Is Baraqex production-ready?",
+      answer: "Baraqex is built on the stable Frontend Hamroun foundation and adds production-grade server capabilities. It includes features like database connections, authentication, API routing, and WebAssembly support that are essential for modern web applications."
     },
     {
-      question: "How do I handle data fetching?",
-      answer: "Frontend Hamroun provides multiple data fetching methods: useEffect for client-side fetching, built-in fetcher hooks for common patterns, server-side data fetching for SSR, and direct API integration for backend communication."
+      question: "How do I handle data fetching and API calls?",
+      answer: "Baraqex provides multiple data fetching approaches: client-side with useEffect and fetch, server-side rendering with automatic data fetching, built-in API routing system, and database integration with connection pooling for optimal performance."
     },
     {
-      question: "Does Frontend Hamroun support TypeScript?",
-      answer: "Yes, Frontend Hamroun has been built with TypeScript from the ground up. We provide comprehensive type definitions for all APIs, making it easy to build type-safe applications."
+      question: "What databases does Baraqex support?",
+      answer: "Baraqex has built-in support for MongoDB, MySQL, and PostgreSQL. The framework provides connection pooling, query optimization, and simple configuration for all supported databases."
+    },
+    {
+      question: "How does WebAssembly integration work?",
+      answer: "Baraqex provides seamless Go WebAssembly integration. You can write performance-critical code in Go, compile it to WebAssembly, and call it directly from JavaScript with automatic type conversion and memory management."
     }
   ];
 
@@ -80,14 +86,14 @@ export default function DocsPage() {
               
               <h1 className="text-4xl md:text-5xl font-bold mb-6">
                 <AnimatedGradientText 
-                  text="Frontend Hamroun Documentation" 
+                  text="Baraqex Documentation" 
                   fontSize="inherit" 
                   fontWeight="inherit"
                 />
               </h1>
               
               <p className="text-xl text-foreground/80 mb-8">
-                A comprehensive guide to building modern web applications with Frontend Hamroun framework
+                A comprehensive guide to building modern full-stack web applications with the Baraqex framework
               </p>
               
               <div className="flex flex-wrap justify-center gap-4">

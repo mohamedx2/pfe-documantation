@@ -20,32 +20,52 @@ const ScrollProgressIndicator: React.FC<ScrollProgressIndicatorProps> = ({
   const [progress, setProgress] = useState(0);
   const [hovering, setHovering] = useState(false);
   const [activeSections, setActiveSections] = useState<Record<string, boolean>>({});
+  const [mounted, setMounted] = useState(false);
   
   useEffect(() => {
-    const calculateProgress = () => {
-      const scrollDistance = document.documentElement.scrollHeight - window.innerHeight;
-      const currentProgress = (window.scrollY / scrollDistance) * 100;
-      setProgress(currentProgress);
-    };
-    
-    window.addEventListener('scroll', calculateProgress);
-    calculateProgress(); // Initial calculation
-    
-    return () => window.removeEventListener('scroll', calculateProgress);
+    setMounted(true);
   }, []);
   
   useEffect(() => {
+    if (!mounted) return;
+    
+    const calculateProgress = () => {
+      if (typeof window === 'undefined' || typeof document === 'undefined') return;
+      
+      const scrollDistance = document.documentElement.scrollHeight - window.innerHeight;
+      const currentProgress = scrollDistance > 0 ? (window.scrollY / scrollDistance) * 100 : 0;
+      setProgress(Math.min(100, Math.max(0, currentProgress)));
+    };
+    
+    window.addEventListener('scroll', calculateProgress, { passive: true });
+    calculateProgress(); // Initial calculation
+    
+    return () => window.removeEventListener('scroll', calculateProgress);
+  }, [mounted]);
+  
+  useEffect(() => {
+    if (!mounted) return;
+    
     const handleSectionInView = (event: CustomEvent<{ id: string, visible: boolean }>) => {
       const { id, visible } = event.detail;
       setActiveSections(prev => ({ ...prev, [id]: visible }));
     };
     
-    document.addEventListener('sectionInView', handleSectionInView as EventListener);
+    if (typeof document !== 'undefined') {
+      document.addEventListener('sectionInView', handleSectionInView as EventListener);
+    }
     
     return () => {
-      document.removeEventListener('sectionInView', handleSectionInView as EventListener);
+      if (typeof document !== 'undefined') {
+        document.removeEventListener('sectionInView', handleSectionInView as EventListener);
+      }
     };
-  }, []);
+  }, [mounted]);
+
+  // Don't render anything until mounted on client
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <div 

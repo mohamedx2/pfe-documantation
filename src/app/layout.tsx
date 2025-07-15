@@ -8,9 +8,10 @@ import {
   GlobeAltIcon,
   LanguageIcon,
   ChatBubbleLeftRightIcon,
-  Bars3Icon
+  Bars3Icon,
+  PresentationChartLineIcon
 } from "@heroicons/react/24/outline";
-import Image from "next/image";
+import HydrationSafeImage from "@/components/HydrationSafeImage";
 import Link from "next/link";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -22,6 +23,7 @@ import { NavigationProvider } from "@/components/NavigationContext";
 import ClientOnly from "@/components/ClientOnly";
 import ClientComponents from "@/components/ClientComponents";
 import CurrentTime from "@/components/CurrentTime";
+import CopyrightYear from "@/components/CopyrightYear";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -38,8 +40,8 @@ const geistMono = Geist_Mono({
 const STATIC_TIME = "12:00 PM";
 
 export const metadata: Metadata = {
-  title: "baraqex - Lightweight JavaScript Framework",
-  description: "A lightweight full-stack JavaScript framework with Virtual DOM and hooks implementation - One Culture, One Framework",
+  title: "Baraqex - Modern Full-Stack JavaScript Framework",
+  description: "A powerful full-stack JavaScript/TypeScript framework with Virtual DOM, hooks, WebAssembly integration, and server-side rendering - Build universal web applications with ease",
 };
 
 export default function RootLayout({
@@ -53,6 +55,11 @@ export default function RootLayout({
       label: "Features", 
       href: "#features", 
       icon: <Squares2X2Icon className="w-5 h-5" /> 
+    },
+    { 
+      label: "Presentation", 
+      href: "/presentation", 
+      icon: <PresentationChartLineIcon className="w-5 h-5" /> 
     },
     { 
       label: "Docs", 
@@ -76,7 +83,7 @@ export default function RootLayout({
     },
     { 
       label: "GitHub", 
-      href: "https://github.com/hamroun/frontend-hamroun", 
+      href: "https://github.com/mohamedx2/baraqex", 
       icon: <ArrowTopRightOnSquareIcon className="w-5 h-5" /> 
     }
   ];
@@ -99,18 +106,22 @@ export default function RootLayout({
               </ClientOnly>
               
               {/* Enhanced scroll progress indicator */}
-              <ScrollProgressIndicator showLabels={true} />
+              <ClientOnly>
+                <ScrollProgressIndicator showLabels={true} />
+              </ClientOnly>
               
               {/* Section navigation dots */}
-              <SectionNavigation 
-                sections={[
-                  { id: 'hero', label: 'Home' },
-                  { id: 'demos', label: 'Demos' },
-                  { id: 'getting-started', label: 'Get Started' },
-                  { id: 'features', label: 'Features' }
-                ]}
-                className="fixed right-6 top-1/2 -translate-y-1/2 z-30 hidden lg:flex flex-col gap-3"
-              />
+              <ClientOnly>
+                <SectionNavigation 
+                  sections={[
+                    { id: 'hero', label: 'Home' },
+                    { id: 'demos', label: 'Demos' },
+                    { id: 'getting-started', label: 'Get Started' },
+                    { id: 'features', label: 'Features' }
+                  ]}
+                  className="fixed right-6 top-1/2 -translate-y-1/2 z-30 hidden lg:flex flex-col gap-3"
+                />
+              </ClientOnly>
               
               {/* Top banner for language selection and special features */}
               <div className="glass-morphism bg-primary/5 backdrop-blur-lg py-2 px-4 text-xs border-b border-primary/10 relative z-10">
@@ -160,9 +171,9 @@ export default function RootLayout({
                     <div className="flex items-center gap-2">
                       <Link href="/" className="cursor-magnet flex items-center gap-2 hover:opacity-90 transition-opacity group">
                         <div className="relative h-10 w-10 animate-float-3d">
-                          <Image 
+                          <HydrationSafeImage 
                             src="/images/logo.png"
-                            alt="Frontend Hamroun Logo"
+                            alt="Baraqex Logo"
                             width={40}
                             height={40}
                             className="object-contain"
@@ -186,6 +197,12 @@ export default function RootLayout({
                           <Link href="/features" className="nav-pill flex items-center gap-1.5" data-section="features">
                             <Squares2X2Icon className="w-4 h-4" />
                             <span>Features</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="/presentation" className="nav-pill flex items-center gap-1.5">
+                            <PresentationChartLineIcon className="w-4 h-4" />
+                            <span>Presentation</span>
                           </Link>
                         </li>
                         <li>
@@ -258,9 +275,9 @@ export default function RootLayout({
                 <div className="container mx-auto px-4">
                   <div className="flex items-center justify-center mb-8">
                     <div className="relative">
-                      <Image 
+                      <HydrationSafeImage 
                         src="/images/logo.png"
-                        alt="Frontend Hamroun Logo"
+                        alt="Baraqex Logo"
                         width={80}
                         height={80}
                         className="object-contain"
@@ -346,7 +363,7 @@ export default function RootLayout({
                   </div>
                   <div className="border-t border-black/10 dark:border-white/10 mt-10 pt-6 text-center text-sm text-foreground/60">
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4">
-                      <p>© {new Date().getFullYear()} Frontend Hamroun - Uniting Developers with One Culture, One Framework</p>
+                      <p>© <CopyrightYear /> Frontend Hamroun - Uniting Developers with One Culture, One Framework</p>
                       <p className="arabic-text">توحيد المطورين بثقافة واحدة، إطار عمل واحد</p>
                     </div>
                   </div>

@@ -4,12 +4,6 @@
   <code style="font-size: 24px; color: #4A90E2; background-color: transparent">{ Frontend Hamroun }</code>
 </p>
 
-
-
-
-
-
-
 This repository contains the documentation website for Frontend Hamroun, a lightweight full-stack JavaScript framework with Virtual DOM and hooks implementation.
 
 ## About Frontend Hamroun
@@ -28,19 +22,104 @@ Frontend Hamroun is a JavaScript framework that provides:
 - **TypeScript Support**: Full type definitions included
 - **Interactive CLI**: Powerful tools for project scaffolding and component creation
 
-## Getting Started
+## 🚀 Features
 
-To run this documentation site locally:
+- **Interactive Documentation** - Comprehensive guides and API references
+- **Live Code Examples** - Interactive code playground with real-time preview
+- **RTL Support** - First-class support for Arabic and other RTL languages
+- **Responsive Design** - Works seamlessly across all devices
+- **Dark/Light Mode** - Theme switching with system preference detection
+- **Testing Suite** - Unit, integration, and E2E tests included
+- **Performance Optimized** - Built with Next.js 15 and optimized for speed
 
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 15
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Testing**: Jest, React Testing Library, Playwright
+- **UI Icons**: Heroicons
+- **Code Highlighting**: React Syntax Highlighter
+- **Animations**: Framer Motion & Custom CSS
+
+## 📋 Prerequisites
+
+- Node.js 18+ 
+- npm or yarn package manager
+
+## 🏃‍♂️ Quick Start
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/hamroun/frontend-hamroun-docs.git
+   cd frontend-hamroun-docs
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Start development server**
+   ```bash
+   npm run dev
+   ```
+
+4. **Open your browser**
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+## 🧪 Testing
+
+### Unit Tests
 ```bash
-# Install dependencies
-npm install
+# Run unit tests
+npm run test
 
-# Run development server
-npm run dev
+# Run tests in watch mode
+npm run test:watch
+
+# Generate coverage report
+npm run test:coverage
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Integration Tests
+```bash
+npm run test:integration
+```
+
+### End-to-End Tests
+```bash
+# Run E2E tests
+npm run test:e2e
+
+# Run E2E tests with UI
+npm run test:e2e:ui
+```
+
+### Run All Tests
+```bash
+npm run test:all
+```
+
+## 📁 Project Structure
+
+```bash
+frontend-hamroun-docs
+├── public/                  # Static files
+├── src/
+│   ├── components/          # Reusable components
+│   ├── docs/                # Documentation files
+│   ├── hooks/               # Custom hooks
+│   ├── layouts/             # Layout components
+│   ├── pages/               # Page components
+│   ├── styles/              # Global styles
+│   └── utils/               # Utility functions
+├── .env                     # Environment variables
+├── .gitignore               # Git ignore file
+├── next.config.js          # Next.js configuration
+├── package.json             # Package configuration
+└── tsconfig.json            # TypeScript configuration
+```
 
 ## Contributing
 

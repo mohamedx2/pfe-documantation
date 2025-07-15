@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 interface AnimatedCounterProps {
   end: number;
@@ -38,6 +38,7 @@ const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   onComplete,
 }) => {
   const [count, setCount] = useState(start);
+  const [mounted, setMounted] = useState(false);
   const countRef = useRef<number>(start);
   const startTimeRef = useRef<number | null>(null);
   const rafRef = useRef<number | null>(null);
@@ -45,6 +46,11 @@ const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   const observerRef = useRef<IntersectionObserver | null>(null);
   const elementRef = useRef<HTMLDivElement>(null);
   const hasAnimatedRef = useRef<boolean>(false);
+
+  // Handle SSR hydration
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Format the number with separator and decimal places
   const formatNumber = (num: number, withHighlight = false) => {
@@ -85,7 +91,7 @@ const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   };
 
   // Different animation functions for variety
-  const getAnimationProgress = (elapsed: number, totalDuration: number) => {
+  const getAnimationProgress = useCallback((elapsed: number, totalDuration: number) => {
     const progress = Math.min(elapsed / totalDuration, 1);
     
     switch (animationFunction) {
@@ -108,9 +114,11 @@ const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
       default:
         return progress;
     }
-  };
+  }, [animationFunction]);
 
-  const animateCount = (timestamp: number) => {
+  const animateCount = useCallback((timestamp: number) => {
+    if (!mounted || typeof window === 'undefined') return;
+    
     if (!startTimeRef.current) {
       startTimeRef.current = timestamp;
     }
@@ -128,10 +136,11 @@ const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
       setCount(end);
       if (onComplete) onComplete();
     }
-  };
+  }, [mounted, duration, start, end, getAnimationProgress, onComplete]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const startAnimation = () => {
+  const startAnimation = useCallback(() => {
+    if (!mounted || typeof window === 'undefined') return;
+    
     if (rafRef.current) {
       cancelAnimationFrame(rafRef.current);
     }
@@ -145,27 +154,34 @@ const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
     
     startTimeRef.current = null;
     rafRef.current = requestAnimationFrame(animateCount);
-  };
+  }, [mounted, start, end, animateCount, onComplete]);
 
   useEffect(() => {
+    if (!mounted || typeof window === 'undefined') return;
+    
     if (!animateOnView) {
       startAnimation();
       return;
     }
     
     // Set up intersection observer to start animation when in view
-    observerRef.current = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && !isVisibleRef.current && !hasAnimatedRef.current) {
-          isVisibleRef.current = true;
-          hasAnimatedRef.current = true;
-          startAnimation();
-        }
-      });
-    }, { threshold: viewThreshold });
+    if (typeof IntersectionObserver !== 'undefined') {
+      observerRef.current = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !isVisibleRef.current && !hasAnimatedRef.current) {
+            isVisibleRef.current = true;
+            hasAnimatedRef.current = true;
+            startAnimation();
+          }
+        });
+      }, { threshold: viewThreshold });
 
-    if (elementRef.current) {
-      observerRef.current.observe(elementRef.current);
+      if (elementRef.current) {
+        observerRef.current.observe(elementRef.current);
+      }
+    } else {
+      // Fallback for environments without IntersectionObserver
+      startAnimation();
     }
 
     return () => {
@@ -178,7 +194,7 @@ const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
         observerRef.current.disconnect();
       }
     };
-  }, [animateOnView, end, duration, start, viewThreshold, startAnimation]);
+  }, [animateOnView, end, duration, start, viewThreshold, mounted, startAnimation]);
 
   // Reset animation when end value changes
   useEffect(() => {

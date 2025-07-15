@@ -12,6 +12,7 @@ import {
   GlobeAltIcon,
   CursorArrowRippleIcon,
   ArrowTrendingUpIcon,
+  
   ChevronRightIcon,
   AcademicCapIcon,
   StarIcon,
@@ -90,8 +91,8 @@ function animationReducer(state: AnimationState, action: AnimationAction): Anima
 
 export default function Home() {
   // Enhanced state for interactive elements
-  // const [scrollPosition, setScrollPosition] = useState(0);
-  // const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [, setScrollPosition] = useState(0);
+  const [, setMousePosition] = useState({ x: 0, y: 0 });
   const [hasScrolled, setHasScrolled] = useState(false);
   const sectionsRef = useRef<{ [key: string]: HTMLElement | null }>({});
   
@@ -224,32 +225,6 @@ runWasmDemo();`
   ];
   
   // Interactive demos with state
-  // const interactiveDemos = [
-  //   { 
-  //     title: "Virtual DOM",
-  //     description: "See how Baraqex efficiently updates only what changes",
-  //     icon: <CubeTransparentIcon className="w-6 h-6" />,
-  //     link: "/docs/concepts/virtual-dom"
-  //   },
-  //   { 
-  //     title: "Hooks API",
-  //     description: "Explore useState, useEffect, and custom hooks",
-  //     icon: <ArrowPathIcon className="w-6 h-6" />,
-  //     link: "/docs/hooks"
-  //   },
-  //   { 
-  //     title: "Server Rendering",
-  //     description: "Experience lightning-fast server-side rendering",
-  //     icon: <ServerIcon className="w-6 h-6" />,
-  //     link: "/docs/ssr"
-  //   },
-  //   { 
-  //     title: "WebAssembly",
-  //     description: "Supercharge performance with Go WebAssembly",
-  //     icon: <CpuChipIcon className="w-6 h-6" />,
-  //     link: "/docs/webassembly"
-  //   }
-  // ];
 
   // Setup intersection observer to track which sections are in view
   useEffect(() => {
@@ -282,48 +257,39 @@ runWasmDemo();`
   }, [hasScrolled, setActiveSection]);
   
   // Track mouse position for parallax and interactive effects
-  // useEffect(() => {
-  //   const handleMouseMove = (e: MouseEvent) => {
-  //     setMousePosition({
-  //       x: e.clientX / window.innerWidth,
-  //       y: e.clientY / window.innerHeight
-  //     });
-  //   };
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({
+        x: e.clientX / window.innerWidth,
+        y: e.clientY / window.innerHeight
+      });
+    };
     
-  //   window.addEventListener('mousemove', handleMouseMove);
-  //   return () => window.removeEventListener('mousemove', handleMouseMove);
-  // }, []);
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
   
   // Update scroll position for parallax effects
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     setScrollPosition(window.scrollY);
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollPosition(window.scrollY);
       
-  //     if (window.scrollY > 50 && !hasScrolled) {
-  //       setHasScrolled(true);
-  //       dispatchAnimation({ 
-  //         type: 'INCREMENT_INTERACTION', 
-  //         payload: 'first-scroll' 
-  //       });
-  //     }
-  //   };
+      if (window.scrollY > 50 && !hasScrolled) {
+        setHasScrolled(true);
+        dispatchAnimation({ 
+          type: 'INCREMENT_INTERACTION', 
+          payload: 'first-scroll' 
+        });
+      }
+    };
     
-  //   window.addEventListener('scroll', handleScroll);
-  //   return () => window.removeEventListener('scroll', handleScroll);
-  // }, [hasScrolled]);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [hasScrolled]);
   
   // Calculate parallax effects
-  // const parallaxOffset = (offset: number) => {
-  //   return -scrollPosition * offset;
-  // };
   
   // Calculate mouse parallax effects
-  // const mouseParallax = (intensity: number) => {
-  //   return {
-  //     x: (mousePosition.x - 0.5) * intensity,
-  //     y: (mousePosition.y - 0.5) * intensity
-  //   };
-  // };
 
   return (
     <div className="min-h-screen">
@@ -758,39 +724,4 @@ render(<App />, document.getElementById('root'));`}</code>
 }
 
 // Interactive counter component for demos
-// function Counter() {
-//   const [count, setCount] = useState(0);
-  
-//   return (
-//     <div className="inline-block">
-//       <div className="p-4 bg-background rounded-lg shadow-md border border-primary/10">
-//         <p className="text-lg mb-4">Count: <span className="font-bold">{count}</span></p>
-//         <div className="flex gap-2 justify-center">
-//           <button 
-//             className="px-3 py-1 bg-primary/10 hover:bg-primary/20 rounded"
-//             onClick={() => setCount(c => c - 1)}
-//           >
-//             -
-//           </button>
-//           <button 
-//             className="px-3 py-1 bg-primary text-white hover:bg-primary-dark rounded"
-//             onClick={() => setCount(c => c + 1)}
-//           >
-//             +
-//           </button>
-//           <button 
-//             className="px-3 py-1 bg-secondary hover:bg-secondary/80 rounded text-xs"
-//             onClick={() => setCount(0)}
-//           >
-//             Reset
-//           </button>
-//         </div>
-//         <div className="mt-4 text-xs text-foreground/60">
-//           <pre className="p-2 bg-secondary/40 rounded overflow-x-auto">
-//             {`const [count, setCount] = useState(${count});`}
-//           </pre>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
+

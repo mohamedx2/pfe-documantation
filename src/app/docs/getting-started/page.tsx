@@ -20,9 +20,9 @@ export default function GettingStartedPage() {
     <div className="docs-section">
       <div className="max-w-4xl mx-auto">
         <div className="mb-12">
-          <h1 className="text-4xl font-bold mb-4">Getting Started with Frontend Hamroun</h1>
+          <h1 className="text-4xl font-bold mb-4">Getting Started with Baraqex</h1>
           <p className="text-xl text-foreground/70">
-            Follow these simple steps to start building your application with Frontend Hamroun - the lightweight JavaScript framework with a focus on culture and community.
+            Follow these simple steps to start building your full-stack application with Baraqex - the modern JavaScript/TypeScript framework with WebAssembly integration and server-side rendering.
           </p>
         </div>
         
@@ -37,24 +37,24 @@ export default function GettingStartedPage() {
               <div className="flex items-start">
                 <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold mr-4">1</div>
                 <div>
-                  <h3 className="font-medium mb-2">Install the Frontend Hamroun CLI</h3>
+                  <h3 className="font-medium mb-2">Install or use Baraqex CLI</h3>
                   <div className="code-block overflow-hidden rounded-lg mb-3">
                     <div className="bg-black/80 text-white p-2 flex items-center">
                       <CommandLineIcon className="w-5 h-5 mr-2" />
                       <span>Terminal</span>
                       <button 
                         className="ml-auto px-2 py-1 text-xs bg-primary/20 hover:bg-primary/30 rounded text-primary"
-                        onClick={() => navigator.clipboard.writeText("npm install -g frontend-hamroun-cli")}
+                        onClick={() => navigator.clipboard.writeText("npx baraqex create my-app")}
                       >
                         Copy
                       </button>
                     </div>
                     <pre className="bg-black text-green-400 p-3 overflow-x-auto font-mono text-sm">
-                      <code>npm install -g frontend-hamroun-cli</code>
+                      <code>npx baraqex create my-app</code>
                     </pre>
                   </div>
                   <p className="text-sm text-foreground/70">
-                    This installs the Frontend Hamroun command-line interface globally on your machine.
+                    This creates a new Baraqex project with interactive template selection (basic-app, ssr-template, fullstack-app).
                   </p>
                 </div>
               </div>
@@ -71,13 +71,13 @@ export default function GettingStartedPage() {
                       <span>Terminal</span>
                       <button 
                         className="ml-auto px-2 py-1 text-xs bg-primary/20 hover:bg-primary/30 rounded text-primary"
-                        onClick={() => navigator.clipboard.writeText("npx create-frontend-app my-app")}
+                        onClick={() => navigator.clipboard.writeText("npx baraqex create my-app")}
                       >
                         Copy
                       </button>
                     </div>
                     <pre className="bg-black text-green-400 p-3 overflow-x-auto font-mono text-sm">
-                      <code>npx create-frontend-app my-app</code>
+                      <code>npx baraqex create my-app</code>
                     </pre>
                   </div>
                   <p className="text-sm text-foreground/70">

@@ -17,10 +17,17 @@ const SectionNavigation: React.FC<SectionNavigationProps> = ({
   sections = []
 }) => {
   const [activeSection, setActiveSection] = useState<string>('hero');
-  const [availableSections, setAvailableSections] = useState<Section[]>(sections);
+  const [availableSections, setAvailableSections] = useState<Section[]>([]);
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   
   // Move DOM checks to useEffect to avoid SSR issues
   useEffect(() => {
+    if (!mounted || typeof document === 'undefined') return;
+    
     // Filter to only show sections that exist on the DOM after component mounts
     const existingSections = sections.filter(section => 
       document.getElementById(section.id)
@@ -41,18 +48,27 @@ const SectionNavigation: React.FC<SectionNavigationProps> = ({
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [sections]);
+    if (typeof window !== 'undefined') {
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      return () => window.removeEventListener('scroll', handleScroll);
+    }
+  }, [sections, mounted]);
   
   // Function to scroll to section
   const scrollToSection = (id: string) => {
+    if (typeof document === 'undefined') return;
+    
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
       setActiveSection(id);
     }
   };
+  
+  // Don't render until mounted on client
+  if (!mounted) {
+    return null;
+  }
   
   return (
     <div className={className}>

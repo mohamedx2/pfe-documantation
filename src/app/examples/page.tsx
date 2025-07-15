@@ -31,75 +31,75 @@ export default function ExamplesPage() {
   const examples = [
     {
       id: 'todo-app',
-      title: 'Todo App',
-      description: 'A simple todo application with state management and local storage',
+      title: 'Todo App with Baraqex',
+      description: 'A simple todo application showcasing Baraqex hooks, state management, and component composition',
       category: 'beginner',
       image: '/images/examples/todo-app.jpg',
-      demoUrl: 'https://examples.hamroun.dev/todo',
-      sourceUrl: 'https://github.com/hamroun/examples/todo',
-      tags: ['state', 'localStorage', 'hooks'],
+      demoUrl: 'https://demo.baraqex.tech/todo',
+      sourceUrl: 'https://github.com/mohamedx2/baraqex/tree/main/examples/todo',
+      tags: ['hooks', 'state', 'components'],
       complexity: 'beginner',
-      createdAt: '2023-08-10'
+      createdAt: '2024-01-15'
     },
     {
-      id: 'weather-app',
-      title: 'Weather Dashboard',
-      description: 'Weather application that fetches data from an API with error handling',
+      id: 'fullstack-blog',
+      title: 'Full-Stack Blog',
+      description: 'Server-side rendered blog with API routes, database integration, and authentication',
       category: 'intermediate',
-      image: '/images/examples/weather-app.jpg',
-      demoUrl: 'https://examples.hamroun.dev/weather',
-      sourceUrl: 'https://github.com/hamroun/examples/weather',
-      tags: ['api', 'fetch', 'async', 'error-handling'],
+      image: '/images/examples/fullstack-blog.jpg',
+      demoUrl: 'https://demo.baraqex.tech/blog',
+      sourceUrl: 'https://github.com/mohamedx2/baraqex/tree/main/examples/blog',
+      tags: ['ssr', 'database', 'auth', 'api'],
       complexity: 'intermediate',
-      createdAt: '2023-09-15'
+      createdAt: '2024-01-20'
     },
     {
-      id: 'blog-cms',
-      title: 'Blog CMS',
-      description: 'Content management system with server components and authentication',
+      id: 'wasm-calculator',
+      title: 'WebAssembly Calculator',
+      description: 'High-performance mathematical operations using WebAssembly with Baraqex integration',
       category: 'advanced',
-      image: '/images/examples/blog-cms.jpg',
-      demoUrl: 'https://examples.hamroun.dev/blog-cms',
-      sourceUrl: 'https://github.com/hamroun/examples/blog-cms',
-      tags: ['server-components', 'auth', 'database'],
+      image: '/images/examples/wasm-calculator.jpg',
+      demoUrl: 'https://demo.baraqex.tech/calculator',
+      sourceUrl: 'https://github.com/mohamedx2/baraqex/tree/main/examples/wasm-calculator',
+      tags: ['wasm', 'performance', 'go', 'math'],
       complexity: 'advanced',
-      createdAt: '2023-10-20'
+      createdAt: '2024-01-25'
     },
     {
       id: 'ecommerce',
       title: 'E-commerce Store',
-      description: 'Online store with shopping cart, product catalog, and checkout',
+      description: 'Full-featured online store with Baraqex server-side rendering, payment integration, and admin dashboard',
       category: 'advanced',
       image: '/images/examples/ecommerce.jpg',
-      demoUrl: 'https://examples.hamroun.dev/ecommerce',
-      sourceUrl: 'https://github.com/hamroun/examples/ecommerce',
-      tags: ['state', 'forms', 'payment', 'api'],
+      demoUrl: 'https://demo.baraqex.tech/store',
+      sourceUrl: 'https://github.com/mohamedx2/baraqex/tree/main/examples/ecommerce',
+      tags: ['fullstack', 'payment', 'database', 'admin'],
       complexity: 'advanced',
-      createdAt: '2023-11-05'
+      createdAt: '2024-02-01'
     },
     {
       id: 'dashboard',
-      title: 'Admin Dashboard',
-      description: 'Administrative interface with charts, tables, and data visualization',
+      title: 'Analytics Dashboard',
+      description: 'Real-time data visualization dashboard with Baraqex server integration and WebSocket updates',
       category: 'intermediate',
       image: '/images/examples/dashboard.jpg',
-      demoUrl: 'https://examples.hamroun.dev/dashboard',
-      sourceUrl: 'https://github.com/hamroun/examples/dashboard',
-      tags: ['charts', 'tables', 'rtl-support'],
+      demoUrl: 'https://demo.baraqex.tech/dashboard',
+      sourceUrl: 'https://github.com/mohamedx2/baraqex/tree/main/examples/dashboard',
+      tags: ['charts', 'realtime', 'websockets', 'data'],
       complexity: 'intermediate',
-      createdAt: '2023-11-28'
+      createdAt: '2024-02-05'
     },
     {
       id: 'chat-app',
-      title: 'Real-time Chat',
-      description: 'Messaging application with real-time updates using WebSockets',
+      title: 'Real-time Chat App',
+      description: 'WebSocket-powered chat application with rooms, authentication, and message history using Baraqex server',
       category: 'advanced',
       image: '/images/examples/chat-app.jpg',
-      demoUrl: 'https://examples.hamroun.dev/chat',
-      sourceUrl: 'https://github.com/hamroun/examples/chat',
-      tags: ['websockets', 'real-time', 'messages'],
+      demoUrl: 'https://demo.baraqex.tech/chat',
+      sourceUrl: 'https://github.com/mohamedx2/baraqex/tree/main/examples/chat',
+      tags: ['websockets', 'realtime', 'auth', 'rooms'],
       complexity: 'advanced',
-      createdAt: '2023-12-12'
+      createdAt: '2024-02-10'
     }
   ];
   
@@ -144,13 +144,13 @@ export default function ExamplesPage() {
         <div className="container mx-auto px-4 text-center">
           <div className="inline-flex items-center bg-primary/10 px-4 py-2 rounded-full text-primary text-sm font-medium mb-6">
             <CodeBracketIcon className="w-5 h-5 mr-2" />
-            Browse working examples of Frontend Hamroun
+            Browse working examples of Baraqex
           </div>
           
           <h1 className="text-4xl font-bold mb-6">Example Projects</h1>
           
           <p className="text-xl max-w-3xl mx-auto mb-10">
-            Explore real-world examples built with Frontend Hamroun to learn patterns, 
+            Explore real-world examples built with Baraqex to learn patterns, 
             best practices, and implementation techniques for your own projects.
           </p>
           
@@ -356,7 +356,7 @@ export default function ExamplesPage() {
                 <h3 className="text-2xl font-bold mb-4">Real-time Chat Application</h3>
                 <p className="text-foreground/70 mb-6">
                   This featured example demonstrates how to build a complete real-time chat application 
-                  using Frontend Hamroun with WebSocket integration. It includes authentication, message 
+                  using Baraqex with WebSocket integration. It includes authentication, message 
                   persistence, typing indicators, and emoji support.
                 </p>
                 
@@ -384,7 +384,7 @@ export default function ExamplesPage() {
                 
                 <div className="flex gap-4">
                   <a 
-                    href="https://examples.hamroun.dev/chat" 
+                    href="https://demo.baraqex.tech/chat" 
                     target="_blank"
                     rel="noopener noreferrer"
                     className="px-6 py-2.5 bg-primary text-white rounded-md flex items-center"
@@ -392,7 +392,7 @@ export default function ExamplesPage() {
                     View Demo <ArrowTopRightOnSquareIcon className="w-4 h-4 ml-2" />
                   </a>
                   <a 
-                    href="https://github.com/hamroun/examples/chat" 
+                    href="https://github.com/mohamedx2/baraqex/tree/main/examples/chat" 
                     target="_blank"
                     rel="noopener noreferrer"
                     className="px-6 py-2.5 bg-background border border-primary/20 rounded-md flex items-center"
@@ -412,7 +412,7 @@ export default function ExamplesPage() {
           <RevealOnScroll>
             <h2 className="text-3xl font-bold text-center mb-4">Start Your Own Project</h2>
             <p className="text-xl text-center max-w-3xl mx-auto mb-12">
-              Use one of our official starter templates to quickly bootstrap your next Frontend Hamroun project
+              Use one of our official starter templates to quickly bootstrap your next Baraqex project
             </p>
           </RevealOnScroll>
           
@@ -421,17 +421,17 @@ export default function ExamplesPage() {
               {
                 name: 'Minimal Starter',
                 description: 'Lightweight template with just the essentials',
-                command: 'npx create-hamroun-app my-app --template minimal'
+                command: 'npx create-baraqex-app my-app --template minimal'
               },
               {
                 name: 'Full-Stack App',
                 description: 'Complete setup with API routes and database',
-                command: 'npx create-hamroun-app my-app --template fullstack'
+                command: 'npx create-baraqex-app my-app --template fullstack'
               },
               {
                 name: 'E-commerce Starter',
                 description: 'Pre-built store with cart and checkout',
-                command: 'npx create-hamroun-app my-app --template ecommerce'
+                command: 'npx create-baraqex-app my-app --template ecommerce'
               }
             ].map((template, index) => (
               <RevealOnScroll key={index} delay={index * 150}>
@@ -461,7 +461,7 @@ export default function ExamplesPage() {
           <RevealOnScroll>
             <h2 className="text-3xl font-bold text-center mb-2">Community Examples</h2>
             <p className="text-lg text-center max-w-3xl mx-auto mb-12">
-              Created by the Frontend Hamroun community around the world
+              Created by the Baraqex community around the world
             </p>
           </RevealOnScroll>
           
@@ -476,7 +476,7 @@ export default function ExamplesPage() {
                 </div>
                 <div className="p-5">
                   <h3 className="font-medium mb-2">Community Example {i}</h3>
-                  <p className="text-sm text-foreground/70 mb-4">Created by a Frontend Hamroun community member</p>
+                  <p className="text-sm text-foreground/70 mb-4">Created by a Baraqex community member</p>
                   <div className="flex justify-end">
                     <a href="#" className="text-primary text-sm hover:underline">
                       View example →
