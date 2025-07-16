@@ -42,6 +42,46 @@ const STATIC_TIME = "12:00 PM";
 export const metadata: Metadata = {
   title: "Baraqex - Modern Full-Stack JavaScript Framework",
   description: "A powerful full-stack JavaScript/TypeScript framework with Virtual DOM, hooks, WebAssembly integration, and server-side rendering - Build universal web applications with ease",
+  keywords: ["JavaScript", "TypeScript", "Framework", "Virtual DOM", "WebAssembly", "SSR", "Full-stack", "Baraqex"],
+  authors: [{ name: "Mohamed Hamroun" }],
+  creator: "Mohamed Hamroun",
+  publisher: "Frontend Hamroun",
+  robots: "index, follow",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/images/logo.png", sizes: "32x32", type: "image/png" },
+      { url: "/images/logo.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: [
+      { url: "/images/logo.png", sizes: "180x180", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
+  },
+  manifest: "/manifest.json",
+  openGraph: {
+    title: "Baraqex - Modern Full-Stack JavaScript Framework",
+    description: "A powerful full-stack JavaScript/TypeScript framework with Virtual DOM, hooks, WebAssembly integration, and server-side rendering",
+    url: "https://baraqex.dev",
+    siteName: "Baraqex Framework",
+    images: [
+      {
+        url: "/images/logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Baraqex Framework Logo",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Baraqex - Modern Full-Stack JavaScript Framework",
+    description: "A powerful full-stack JavaScript/TypeScript framework with Virtual DOM, hooks, WebAssembly integration, and server-side rendering",
+    images: ["/images/logo.png"],
+    creator: "@mohamedx2",
+  },
 };
 
 export default function RootLayout({

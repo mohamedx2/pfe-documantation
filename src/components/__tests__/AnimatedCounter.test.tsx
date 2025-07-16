@@ -154,12 +154,3 @@ describe('AnimatedCounter Component', () => {
   })
 })
     
-    await waitFor(() => {
-      const element = screen.getByText((content, element) => {
-        return element?.textContent === '$50.00' || false
-      })
-      expect(element).toBeInTheDocument()
-    }, { timeout: 500 })
-    })
-    })
-    
