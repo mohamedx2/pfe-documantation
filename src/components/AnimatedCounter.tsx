@@ -72,9 +72,12 @@ const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
               <span 
                 key={i} 
                 className={`${highlightColor} inline-block transition-transform`}
-                style={{ 
+                style={mounted ? { 
                   opacity: Math.random() * 0.5 + 0.5,
                   transform: `translateY(${Math.random() * 4 - 2}px)` 
+                } : {
+                  opacity: 1,
+                  transform: 'translateY(0px)'
                 }}
               >
                 {char}

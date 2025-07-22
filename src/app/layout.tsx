@@ -168,7 +168,8 @@ export default function RootLayout({
                 <div className="container mx-auto flex justify-between items-center">
                   <div className="flex items-center gap-4">
                     <div className="prayer-time animate-pulse-border">
-                      <span className="prayer-dot"></span>                      <span>
+                      <span className="prayer-dot"></span>
+                      <span>
                         <ClientOnly 
                           fallback={STATIC_TIME}
                         >

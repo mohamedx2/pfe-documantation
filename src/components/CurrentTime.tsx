@@ -3,10 +3,11 @@
 import { useEffect, useState } from 'react';
 
 export default function CurrentTime() {
-  const [time, setTime] = useState<string>('');
+  // Initialize with the same static time used as fallback to prevent hydration mismatch
+  const [time, setTime] = useState<string>('12:00 PM');
   
   useEffect(() => {
-    // Set initial time
+    // Set actual time after component mounts (client-side only)
     updateTime();
     
     // Update time every second
